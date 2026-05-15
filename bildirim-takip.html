@@ -1546,10 +1546,14 @@ let currentPerson = null;
 async function loadData() {
   if (SHEETS_CSV_URL) {
     try {
-      const res = await fetch(SHEETS_CSV_URL);
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEETS_CSV_URL);
+      const res = await fetch(proxyUrl);
       const csv = await res.text();
-      allData = parseCSV(csv);
-      return;
+      const parsed = parseCSV(csv);
+      if (parsed.length > 0) {
+        allData = parsed;
+        return;
+      }
     } catch(e) {
       console.warn("Sheets yüklenemedi, demo veri kullanılıyor.", e);
     }
