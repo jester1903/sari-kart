@@ -1542,6 +1542,14 @@ const DEMO_DATA = [
 // ═══════════════════════
 let allData = [];
 let currentPerson = null;
+let dataReady = false;
+let dataLoading = false;
+
+// Sayfa açılır açılmaz arka planda veriyi yükle
+window.addEventListener('DOMContentLoaded', () => {
+  dataLoading = true;
+  loadData().then(() => { dataReady = true; dataLoading = false; });
+});
 
 async function loadData() {
   if (SHEETS_CSV_URL) {
@@ -1675,6 +1683,13 @@ function renderPersonList() {
     `}).join('');
 }
 
+function trLower(str) {
+  return str.replace(/İ/g, 'i').replace(/I/g, 'ı')
+            .replace(/Ğ/g, 'ğ').replace(/Ü/g, 'ü')
+            .replace(/Ş/g, 'ş').replace(/Ö/g, 'ö')
+            .replace(/Ç/g, 'ç').toLowerCase();
+}
+
 function onSearchInput(val) {
   const dropdown = document.getElementById('autocomplete-dropdown');
   const trimmed = val.trim();
@@ -1687,7 +1702,7 @@ function onSearchInput(val) {
 
   const allPersons = getPersonsSorted().sort((a, b) => a.name.localeCompare(b.name, 'tr'));
   const matches = allPersons.filter(p =>
-    p.name.toLowerCase().includes(trimmed.toLowerCase())
+    trLower(p.name).includes(trLower(trimmed))
   );
 
   if (matches.length === 0) {
@@ -1717,7 +1732,7 @@ function onSearchInput(val) {
 }
 
 function highlightMatch(name, query) {
-  const idx = name.toLowerCase().indexOf(query.toLowerCase());
+  const idx = trLower(name).indexOf(trLower(query));
   if (idx === -1) return name;
   return name.slice(0, idx) +
     `<span style="color:var(--accent);font-weight:800;">${name.slice(idx, idx + query.length)}</span>` +
@@ -1964,12 +1979,17 @@ function drawLeaf(ctx, x, y, r, angle, filled, isPerson) {
 }
 
 async function goToSelect() {
-  await loadData();
   document.getElementById('search-input').value = '';
   const dd = document.getElementById('autocomplete-dropdown');
   if (dd) dd.style.display = 'none';
-  renderPersonList();
   goTo('select');
+  if (!dataReady) {
+    document.getElementById('person-list').innerHTML =
+      '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Veriler yükleniyor…</div></div>';
+    await loadData();
+    dataReady = true;
+  }
+  renderPersonList();
 }
 </script>
 </body>
