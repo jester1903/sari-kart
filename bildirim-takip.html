@@ -1545,31 +1545,80 @@ let currentPerson = null;
 
 async function loadData() {
   if (SHEETS_CSV_URL) {
-    try {
-      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEETS_CSV_URL);
-      const res = await fetch(proxyUrl);
-      const csv = await res.text();
-      const parsed = parseCSV(csv);
-      if (parsed.length > 0) {
-        allData = parsed;
-        return;
+    const proxies = [
+      'https://api.allorigins.win/raw?url=',
+      'https://corsproxy.io/?',
+    ];
+    for (const proxy of proxies) {
+      try {
+        const res = await fetch(proxy + encodeURIComponent(SHEETS_CSV_URL));
+        if (!res.ok) continue;
+        const csv = await res.text();
+        const parsed = parseCSV(csv);
+        if (parsed.length > 0) {
+          allData = parsed;
+          console.log('Sheets yüklendi:', parsed.length, 'kayıt');
+          return;
+        }
+      } catch(e) {
+        console.warn('Proxy başarısız:', proxy, e);
       }
-    } catch(e) {
-      console.warn("Sheets yüklenemedi, demo veri kullanılıyor.", e);
     }
+    console.warn('Tüm proxy\'ler başarısız, gömülü veri kullanılıyor.');
   }
   allData = DEMO_DATA;
 }
 
 function parseCSV(csv) {
   const lines = csv.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/ /g,'_'));
-  return lines.slice(1).map(line => {
-    const vals = line.split(',');
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
-    return obj;
+  if (lines.length < 2) return [];
+
+  // CSV'yi virgüle böl ama tırnak içindeki virgülleri koru
+  function splitLine(line) {
+    const result = [];
+    let cur = '', inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQuote = !inQuote; }
+      else if (ch === ',' && !inQuote) { result.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  const rawHeaders = splitLine(lines[0]);
+
+  // Gerçek Excel sütun başlıklarını uygulama alanlarına map et
+  const headerMap = {
+    'isim': 'ad_soyad',
+    'ad soyad': 'ad_soyad',
+    'ad_soyad': 'ad_soyad',
+    'tarih': 'bildirim_tarihi',
+    'bildirim tarihi': 'bildirim_tarihi',
+    'süreç durumu': 'durum',
+    'durum': 'durum',
+    'tespit edilen durum': 'tespit',
+    'tespit': 'tespit',
+    'öneri': 'oneri',
+    'yapılan i̇şlem / durum': 'alinanan_aksiyon',
+    'yapılan işlem / durum': 'alinanan_aksiyon',
+    'alınan aksiyon': 'alinanan_aksiyon',
+    'alinanan_aksiyon': 'alinanan_aksiyon',
+  };
+
+  const headers = rawHeaders.map(h => {
+    const key = h.toLowerCase().replace(/\r/g,'').trim();
+    return headerMap[key] || key;
   });
+
+  return lines.slice(1).map(line => {
+    const vals = splitLine(line);
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').replace(/\r/g,'').trim());
+    // Boş veya "0" isim satırlarını filtrele
+    return obj;
+  }).filter(r => r.ad_soyad && r.ad_soyad !== '0');
 }
 
 function initials(name) {
