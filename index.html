@@ -1644,7 +1644,7 @@ function renderPersonList() {
     top5.map((p, i) => {
       const r = rankStyles[i];
       return `
-      <div class="person-card" onclick="selectPerson('${p.name.replace(/'/g,"\\'")}')">
+      <div class="person-card" style="cursor:default;">
         <div style="position:relative;flex-shrink:0;width:52px;height:52px;">
           <div style="width:46px;height:46px;border-radius:14px;background:${r.bg};box-shadow:0 4px 16px ${r.shadow};display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:${r.labelColor};">${initials(p.name)}</div>
           <div style="position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:${r.bg};border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:${r.labelColor};font-family:'Syne',sans-serif;box-shadow:0 2px 8px ${r.shadow};">${r.label}</div>
@@ -1653,7 +1653,6 @@ function renderPersonList() {
           <div class="person-name">${p.name}</div>
           <div class="person-count">${p.count} bildirim</div>
         </div>
-        <div class="chevron">›</div>
       </div>
     `}).join('');
 }
