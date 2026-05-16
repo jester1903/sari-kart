@@ -1545,35 +1545,13 @@ let currentPerson = null;
 let dataReady = false;
 let dataLoading = false;
 
-// Sayfa açılır açılmaz arka planda veriyi yükle
+// Sayfa açılır açılmaz veriyi yükle
 window.addEventListener('DOMContentLoaded', () => {
-  dataLoading = true;
-  loadData().then(() => { dataReady = true; dataLoading = false; });
+  allData = DEMO_DATA;
+  dataReady = true;
 });
 
 async function loadData() {
-  if (SHEETS_CSV_URL) {
-    const proxies = [
-      'https://api.allorigins.win/raw?url=',
-      'https://corsproxy.io/?',
-    ];
-    for (const proxy of proxies) {
-      try {
-        const res = await fetch(proxy + encodeURIComponent(SHEETS_CSV_URL));
-        if (!res.ok) continue;
-        const csv = await res.text();
-        const parsed = parseCSV(csv);
-        if (parsed.length > 0) {
-          allData = parsed;
-          console.log('Sheets yüklendi:', parsed.length, 'kayıt');
-          return;
-        }
-      } catch(e) {
-        console.warn('Proxy başarısız:', proxy, e);
-      }
-    }
-    console.warn('Tüm proxy\'ler başarısız, gömülü veri kullanılıyor.');
-  }
   allData = DEMO_DATA;
 }
 
@@ -1978,18 +1956,12 @@ function drawLeaf(ctx, x, y, r, angle, filled, isPerson) {
   ctx.restore();
 }
 
-async function goToSelect() {
+function goToSelect() {
   document.getElementById('search-input').value = '';
   const dd = document.getElementById('autocomplete-dropdown');
   if (dd) dd.style.display = 'none';
-  goTo('select');
-  if (!dataReady) {
-    document.getElementById('person-list').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Veriler yükleniyor…</div></div>';
-    await loadData();
-    dataReady = true;
-  }
   renderPersonList();
+  goTo('select');
 }
 </script>
 </body>
