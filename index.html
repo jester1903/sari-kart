@@ -373,9 +373,25 @@
   <!-- ══ SCREEN 1: WELCOME ══ -->
   <div class="screen active" id="screen-welcome">
     <div class="logo-ring">📋</div>
-    <h1 class="welcome-title">Sarı Kart<br>Bildirim Takip Sistemi</h1>
-    <p class="welcome-sub">Bildirimlerinizin durumunu ve alınan aksiyonları kolayca takip edin.</p>
-    <button class="btn-primary" onclick="goToSelect()">Başla →</button>
+    <h1 class="welcome-title">Sarı Kart<br>Bildirim ve<br>Takip Sistemi</h1>
+    <p class="welcome-sub">Bildirim yap, durumunu ve alınan aksiyonları kolayca takip et.</p>
+    <!-- Bildirim yap butonu -->
+    <div style="width:100%;max-width:320px;box-sizing:border-box;margin-bottom:16px;background:linear-gradient(135deg,rgba(247,201,72,0.13),rgba(245,166,35,0.07));border:1px solid rgba(247,201,72,0.35);border-radius:20px;padding:22px 22px 20px;text-align:left;">
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#f7c948;margin-bottom:6px;white-space:nowrap;">🟡 Sarı Kart Bildirimi Yap</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:1.55;margin-bottom:16px;">Güvensiz durum veya davranış fark ettiniz mi? Hemen bildirim yapın, iş güvenliğine katkı sağlayın.</div>
+      <button onclick="window.open('https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=b5tgsyQQWEuObL3E3m48h4p_XT3xmANAlWIXCXIDn75UNEhGVEZZUks1UkgyQVQxWDlWVFNFMVBJUiQlQCN0PWcu','_self')" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;background:linear-gradient(135deg,#f7c948,#f5a623);border:none;border-radius:14px;color:#1a0f00;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.3px;box-shadow:0 6px 20px rgba(247,201,72,0.35);">
+        📝 Bildirim Yap
+      </button>
+    </div>
+
+    <!-- Takip sistemi butonu -->
+    <div style="width:100%;max-width:320px;box-sizing:border-box;background:linear-gradient(135deg,rgba(79,142,247,0.1),rgba(124,92,252,0.07));border:1px solid rgba(79,142,247,0.3);border-radius:20px;padding:22px 22px 20px;text-align:left;">
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--accent);margin-bottom:6px;white-space:nowrap;">📋 Bildirim Takip Sistemi</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:1.55;margin-bottom:16px;">Daha önce yaptığınız bildirimlerin durumunu ve alınan aksiyonları görüntüleyin.</div>
+      <button onclick="goToSelect()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:13px 10px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:0.2px;box-shadow:0 6px 20px rgba(79,142,247,0.35);white-space:nowrap;overflow:hidden;">
+        Bildirimlerimi Takip Et →
+      </button>
+    </div>
   </div>
 
   <!-- ══ SCREEN 2: KİŞİ SEÇ ══ -->
@@ -390,6 +406,11 @@
         <input class="search-input" type="text" placeholder="Adınızı yazın…" oninput="onSearchInput(this.value)" id="search-input" autocomplete="off">
         <div id="autocomplete-dropdown" style="display:none; position:absolute; top:calc(100% + 6px); left:0; right:0; background:var(--surface2); border:1px solid var(--border); border-radius:14px; overflow:hidden; z-index:20; box-shadow:0 8px 24px rgba(0,0,0,0.4);"></div>
       </div>
+    </div>
+    <div style="padding:0 24px 16px;">
+      <button onclick="goToTree2()" style="width:100%;padding:14px;background:linear-gradient(135deg,rgba(45,217,143,0.12),rgba(34,197,94,0.06));border:1px solid rgba(45,217,143,0.3);border-radius:16px;color:#2dd98f;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s;">
+        🌳 Ramak Kala Ağacını Görüntüle
+      </button>
     </div>
     <div class="person-list" id="person-list"></div>
   </div>
@@ -413,7 +434,7 @@
   <!-- ══ SCREEN 4: AĞAÇ ══ -->
   <div class="screen" id="screen-tree">
     <div class="detail-header">
-      <button class="back-btn" onclick="goTo('detail')">← Geri</button>
+      <button class="back-btn" id="tree-back-btn" onclick="goTo(treeSource)">← Geri</button>
       <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;">🌳 Ramak Kala Ağacı</div>
       <div id="tree-person-name" style="color:var(--text-muted);font-size:13px;"></div>
     </div>
@@ -1869,8 +1890,24 @@ function goTo(screen) {
 
 // ── AĞAÇ ──
 const TREE_CAPACITY = 400;
+let treeSource = 'select'; // hangi ekrandan gelindi
+
+function goToTree2() {
+  treeSource = 'select';
+  // 2. ekrandan açılınca — kişi seçilmemiş, genel ağaç göster
+  const totalLeaves = allData.length;
+
+  document.getElementById('tree-person-name').textContent = 'Tüm bildirimler';
+  document.getElementById('tree-leaf-count').textContent = totalLeaves + ' yaprak';
+  document.getElementById('tree-leaf-label').textContent =
+    'Bildirimlerle yeşeren Ramak Kala Ağacında toplam ' + totalLeaves + ' yaprak bulunuyor.';
+
+  goTo('tree');
+  setTimeout(() => drawTree(0, totalLeaves), 150);
+}
 
 function goToTree() {
+  treeSource = 'detail';
   const name = currentPerson;
   const personCount = allData.filter(r => (r.ad_soyad || '') === name).length;
   const totalLeaves = allData.length; // tüm sistemdeki toplam bildirim = toplam yaprak sayısı
