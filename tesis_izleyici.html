@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tesis Olay İzleyici</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{--bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;--border:#2e3350;--border2:#3a4060;--text:#e8eaf2;--text2:#8b90a8;--text3:#555b75;--accent:#4f8ef7;--red:#e8534a;--green:#22c97a;--orange:#f5a623;--purple:#9b8ff7;--radius:10px;--rsm:6px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.app-title{font-size:18px;font-weight:600;letter-spacing:-.3px}
+.app-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.live-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--green);background:#22c97a15;border:1px solid #22c97a33;border-radius:20px;padding:4px 12px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.btn-refresh{padding:5px 14px;font-size:12px;font-family:inherit;border:1px solid var(--border2);border-radius:20px;background:transparent;cursor:pointer;color:var(--text2);transition:all .15s}
+.btn-refresh:hover{color:var(--text);border-color:var(--text2)}
+.btn-heat{padding:7px 16px;font-size:13px;font-family:inherit;font-weight:500;border:1.5px solid var(--orange);border-radius:20px;background:#f5a62318;cursor:pointer;color:var(--orange);transition:all .2s;white-space:nowrap}
+.btn-heat:hover{background:#f5a62330;box-shadow:0 0 12px #f5a62333}
+.btn-heat.on{background:var(--orange);color:#0f1117;border-color:var(--orange);box-shadow:0 0 16px #f5a62355}
+.tesis-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px}
+.tesis-lbl{font-size:12px;color:var(--text2);white-space:nowrap;font-weight:500}
+.tesis-select{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:13px;padding:6px 10px;min-width:220px}
+.tesis-select:focus{outline:none;border-color:var(--accent)}
+.tesis-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--green);background:#22c97a12;border:1px solid #22c97a33;border-radius:6px;padding:4px 10px}
+.no-tesis{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:80px 20px;text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius)}
+.no-tesis-ico{font-size:52px;opacity:.3}
+.no-tesis-txt{font-size:15px;color:var(--text2)}
+.no-tesis-sub{font-size:12px;color:var(--text3);max-width:340px;line-height:1.7}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;transition:all .15s;user-select:none}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.stat-card.dimmed{opacity:.28}
+.stat-card.active-filter{border-color:var(--accent);box-shadow:0 0 0 1px #4f8ef733}
+.stat-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-bottom:6px}
+.stat-num{font-size:22px;font-weight:600}
+.stat-lbl{font-size:11px;color:var(--text2);margin-top:2px}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px}
+.fg{display:flex;align-items:center;gap:6px}
+.flbl{font-size:11px;color:var(--text2);white-space:nowrap}
+.filter-bar input[type=date],.filter-bar select{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:12px;padding:5px 8px}
+.filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:var(--accent)}
+.fsep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.btn-apply{padding:5px 14px;font-size:12px;font-family:inherit;font-weight:500;background:var(--accent);color:#fff;border:none;border-radius:var(--rsm);cursor:pointer}
+.btn-apply:hover{opacity:.85}
+.btn-reset{padding:5px 12px;font-size:12px;font-family:inherit;background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:var(--rsm);cursor:pointer}
+.btn-reset:hover{color:var(--text);border-color:var(--text2)}
+.map-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.canvas-wrap{flex:1;position:relative;overflow:hidden;min-height:420px}
+#mapCanvas{display:block;width:100%;cursor:default}
+.map-legend{display:flex;flex-wrap:wrap;gap:10px;padding:8px 14px;border-top:1px solid var(--border);align-items:center}
+.li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.ldot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.heat-legend{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text2);margin-left:auto}
+.heat-grad{width:80px;height:9px;border-radius:5px;background:linear-gradient(to right,#4f8ef740,#22c97a99,#f5a62399,#e8534a)}
+.bottom-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px}
+.last-refresh{font-size:11px;color:var(--text3)}
+.map-tip{font-size:10px;color:var(--text3)}
+.loading{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--text3);font-size:13px;gap:10px}
+.spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+@media(max-width:640px){body{padding:12px}.stats-row{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="app-title">🏭 Tesis Olay İzleyici</div>
+    <div class="app-sub">Salt okunur · Supabase bulut verisi · Yönetici Panelindeki değişiklikler anında yansır</div>
+  </div>
+  <div class="top-right">
+    <button class="btn-heat" id="heatBtn" onclick="toggleHeat()">🌡 Isı Haritası</button>
+    <div class="live-badge"><span class="live-dot"></span>Canlı</div>
+    <button class="btn-refresh" onclick="refreshData()">🔄 Yenile</button>
+  </div>
+</div>
+
+<div class="tesis-bar">
+  <span class="tesis-lbl">🏭 Tesis:</span>
+  <select class="tesis-select" id="tesisSelect" onchange="onTesisChange(this.value)">
+    <option value="">— Tesis seçin —</option>
+  </select>
+  <span class="tesis-badge" id="tesBadge" style="display:none">✓ <span id="tesBadgeName"></span></span>
+  <span class="last-refresh" id="lastRefresh" style="margin-left:auto"></span>
+</div>
+
+<div id="noTesisScreen" class="no-tesis">
+  <div class="no-tesis-ico">🏭</div>
+  <div class="no-tesis-txt">Tesis seçilmedi</div>
+  <div class="no-tesis-sub">Yukarıdaki listeden bir tesis seçin. Tesis bilgileri Yönetici Panelinden tanımlanır.</div>
+</div>
+
+<div id="loadingScreen" style="display:none">
+  <div class="loading"><div class="spinner"></div>Yükleniyor...</div>
+</div>
+
+<div id="mainContent" style="display:none">
+  <div class="stats-row">
+    <div class="stat-card" id="card-is"     onclick="toggleTF('is')">    <span class="stat-dot" style="background:#e8534a"></span><div class="stat-num" id="s-is">0</div>    <div class="stat-lbl">İş Kazası</div></div>
+    <div class="stat-card" id="card-cevre"  onclick="toggleTF('cevre')"> <span class="stat-dot" style="background:#22c97a"></span><div class="stat-num" id="s-cevre">0</div>  <div class="stat-lbl">Çevre Kazası</div></div>
+    <div class="stat-card" id="card-maddi"  onclick="toggleTF('maddi')"> <span class="stat-dot" style="background:#4f8ef7"></span><div class="stat-num" id="s-maddi">0</div>  <div class="stat-lbl">Maddi Hasarlı</div></div>
+    <div class="stat-card" id="card-yangin" onclick="toggleTF('yangin')"><span class="stat-dot" style="background:#f5a623"></span><div class="stat-num" id="s-yangin">0</div> <div class="stat-lbl">Yangın</div></div>
+    <div class="stat-card" id="card-ramak"  onclick="toggleTF('ramak')"> <span class="stat-dot" style="background:#9b8ff7"></span><div class="stat-num" id="s-ramak">0</div>  <div class="stat-lbl">Ramak Kala</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="fg"><span class="flbl">Başlangıç</span><input type="date" id="fFrom"></div>
+    <div class="fg"><span class="flbl">Bitiş</span><input type="date" id="fTo"></div>
+    <div class="fsep"></div>
+    <div class="fg"><span class="flbl">Bölge</span><select id="fZone"><option value="">Tümü</option></select></div>
+    <div class="fg"><span class="flbl">Tür</span>
+      <select id="fType">
+        <option value="">Tümü</option>
+        <option value="is">İş Kazası</option><option value="cevre">Çevre Kazası</option>
+        <option value="maddi">Maddi Hasarlı</option><option value="yangin">Yangın</option><option value="ramak">Ramak Kala</option>
+      </select>
+    </div>
+    <div class="fg" style="gap:6px">
+      <button class="btn-apply" onclick="applyFilter()">Uygula</button>
+      <button class="btn-reset" onclick="resetFilter()">Sıfırla</button>
+    </div>
+  </div>
+
+  <div class="map-wrap">
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="mapCanvas"></canvas>
+    </div>
+    <div class="map-legend">
+      <div class="li"><span class="ldot" style="background:#e8534a"></span>İş Kazası</div>
+      <div class="li"><span class="ldot" style="background:#22c97a"></span>Çevre Kazası</div>
+      <div class="li"><span class="ldot" style="background:#4f8ef7"></span>Maddi Hasarlı</div>
+      <div class="li"><span class="ldot" style="background:#f5a623"></span>Yangın</div>
+      <div class="li"><span class="ldot" style="background:#9b8ff7"></span>Ramak Kala</div>
+      <div class="heat-legend" id="heatLegend" style="display:none">
+        <span>Düşük risk</span><div class="heat-grad"></div><span>Yüksek risk</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div></div>
+    <div class="map-tip">💡 Noktaya tıklayarak detay görün · Kart üstüne tıklayarak türe göre filtreleyin</div>
+  </div>
+</div>
+
+<script>
+// ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
+const SB_URL = 'https://wvzloxifhekwgvyoiudv.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2emxveGlmaGVrd2d2eW9pdWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzODMyNTcsImV4cCI6MjA5NTk1OTI1N30.DvM--DZboUnVkcyDmcTcalk8N-TtXHrddTh2zqF5ECY';
+const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+async function sbGet(table, params=''){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${params}`,{headers:{...H,'Accept':'application/json'}});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const TYPES={
+  is:    {label:'İş Kazası',    color:'#e8534a',key:'s-is',    weight:5},
+  yangin:{label:'Yangın',       color:'#f5a623',key:'s-yangin',weight:4},
+  cevre: {label:'Çevre Kazası', color:'#22c97a',key:'s-cevre', weight:3},
+  maddi: {label:'Maddi Hasarlı',color:'#4f8ef7',key:'s-maddi', weight:2},
+  ramak: {label:'Ramak Kala',   color:'#9b8ff7',key:'s-ramak', weight:1}
+};
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let curTesisId=null, curTesisName='';
+let incidents=[], zones=[], imgDataUrl=null, mapImg=null;
+let heatMode=false, activeTF=null;
+let filter={from:'',to:'',zone:'',type:''};
+let tooltip={incId:null};
+
+// ─── LOAD TESISLER ────────────────────────────────────────────────────────
+async function loadTesisler(){
+  try{
+    const list=await sbGet('tesisler','order=created_at.asc');
+    const sel=document.getElementById('tesisSelect');
+    const cur=sel.value;
+    sel.innerHTML='<option value="">— Tesis seçin —</option>';
+    list.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.name;sel.appendChild(o);});
+    if(cur&&list.find(t=>t.id===cur))sel.value=cur;
+    return list;
+  }catch(e){console.error('Tesisler yüklenemedi:',e);return [];}
+}
+
+async function onTesisChange(id){
+  curTesisId=id||null;
+  tooltip.incId=null;activeTF=null;heatMode=false;
+  filter={from:'',to:'',zone:'',type:''};
+  ['fFrom','fTo'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  ['fZone','fType'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));
+  document.getElementById('heatBtn').classList.remove('on');
+  document.getElementById('heatBtn').textContent='🌡 Isı Haritası';
+  document.getElementById('heatLegend').style.display='none';
+
+  if(!id){
+    document.getElementById('noTesisScreen').style.display='flex';
+    document.getElementById('mainContent').style.display='none';
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('tesBadge').style.display='none';
+    return;
+  }
+
+  document.getElementById('noTesisScreen').style.display='none';
+  document.getElementById('mainContent').style.display='none';
+  document.getElementById('loadingScreen').style.display='block';
+
+  try{
+    const [inc,zon,har]=await Promise.all([
+      sbGet('olaylar',`tesis_id=eq.${id}&order=created_at.asc`),
+      sbGet('zonlar', `tesis_id=eq.${id}&order=created_at.asc`),
+      sbGet('haritalar',`tesis_id=eq.${id}`)
+    ]);
+    incidents=inc.map(r=>({id:r.id,type:r.type,title:r.title,zone:r.zone,date:r.date,time:r.time,desc:r.aciklama,x:r.x,y:r.y}));
+    zones=zon.map(r=>({name:r.name,fill:r.fill,pts:r.pts}));
+    imgDataUrl=har[0]?.img_data||null;
+
+    const list=await sbGet('tesisler',`id=eq.${id}`);
+    curTesisName=list[0]?.name||'';
+    document.getElementById('tesBadgeName').textContent=curTesisName;
+    document.getElementById('tesBadge').style.display='inline-flex';
+    document.getElementById('lastRefresh').textContent='Son güncelleme: '+new Date().toLocaleTimeString('tr-TR');
+
+    updateStats();updateZoneSel();
+
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+
+    mapImg=null;
+    if(imgDataUrl){
+      mapImg=new Image();
+      mapImg.onload=()=>{fitCanvas();drawMap();};
+      mapImg.src=imgDataUrl;
+    }
+  }catch(e){
+    console.error(e);
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('noTesisScreen').style.display='flex';
+    document.getElementById('noTesisScreen').querySelector('.no-tesis-txt').textContent='Veri yüklenemedi';
+  }
+}
+
+async function refreshData(){
+  await loadTesisler();
+  if(curTesisId) await onTesisChange(curTesisId);
+}
+
+// ─── VIEWPORT STATE ───────────────────────────────────────────────────────
+let vp={scale:1,ox:0,oy:0,dragging:false,lastX:0,lastY:0};
+
+function fitCanvas(){
+  if(!mapImg)return;
+  const wrap=document.getElementById('canvasWrap');
+  const c=document.getElementById('mapCanvas');
+  const ww=wrap.clientWidth;
+  const wh=Math.max(500,Math.round(window.innerHeight*0.65));
+  wrap.style.height=wh+'px';
+  c.width=ww;c.height=wh;c.style.width=ww+'px';c.style.height=wh+'px';
+  const pad=20;
+  vp.scale=Math.min((ww-pad*2)/mapImg.naturalWidth,(wh-pad*2)/mapImg.naturalHeight);
+  vp.ox=(ww-mapImg.naturalWidth*vp.scale)/2;
+  vp.oy=(wh-mapImg.naturalHeight*vp.scale)/2;
+}
+function resizeCanvas(){fitCanvas();}
+
+function canvasToNorm(cx,cy){
+  if(!mapImg)return{x:0,y:0};
+  return{x:(cx-vp.ox)/vp.scale/mapImg.naturalWidth, y:(cy-vp.oy)/vp.scale/mapImg.naturalHeight};
+}
+function normToImg(nx,ny){
+  if(!mapImg)return{x:0,y:0};
+  return{x:nx*mapImg.naturalWidth, y:ny*mapImg.naturalHeight};
+}
+
+// ─── STATS ────────────────────────────────────────────────────────────────
+function updateStats(){
+  const c={is:0,cevre:0,maddi:0,yangin:0,ramak:0};
+  incidents.forEach(i=>{if(c[i.type]!==undefined)c[i.type]++;});
+  Object.keys(c).forEach(k=>document.getElementById(TYPES[k].key).textContent=c[k]);
+}
+function updateZoneSel(){
+  const sel=document.getElementById('fZone');const cur=sel.value;
+  sel.innerHTML='<option value="">Tümü</option>';
+  zones.forEach(z=>{const o=document.createElement('option');o.value=z.name;o.textContent=z.name;sel.appendChild(o);});
+  if(cur)sel.value=cur;
+}
+
+// ─── FILTER ───────────────────────────────────────────────────────────────
+function applyFilter(){filter={from:document.getElementById('fFrom').value,to:document.getElementById('fTo').value,zone:document.getElementById('fZone').value,type:document.getElementById('fType').value};tooltip.incId=null;drawMap();}
+function resetFilter(){filter={from:'',to:'',zone:'',type:''};activeTF=null;['fFrom','fTo'].forEach(id=>document.getElementById(id).value='');['fZone','fType'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));tooltip.incId=null;drawMap();}
+function toggleTF(t){if(activeTF===t){activeTF=null;document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));}else{activeTF=t;Object.keys(TYPES).forEach(k=>{document.getElementById('card-'+k).classList.toggle('dimmed',k!==t);document.getElementById('card-'+k).classList.toggle('active-filter',k===t);});}tooltip.incId=null;drawMap();}
+function toggleHeat(){heatMode=!heatMode;const btn=document.getElementById('heatBtn');btn.classList.toggle('on',heatMode);btn.textContent=heatMode?'🌡 Isı Haritası ✓':'🌡 Isı Haritası';document.getElementById('heatLegend').style.display=heatMode?'flex':'none';tooltip.incId=null;drawMap();}
+
+function getFiltered(){return incidents.filter(i=>{if(filter.from&&i.date&&i.date<filter.from)return false;if(filter.to&&i.date&&i.date>filter.to)return false;if(filter.zone&&i.zone!==filter.zone)return false;if(filter.type&&i.type!==filter.type)return false;if(activeTF&&i.type!==activeTF)return false;return true;});}
+
+// ─── GEOMETRY ─────────────────────────────────────────────────────────────
+function ptInPoly(nx,ny,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const xi=pts[i].x,yi=pts[i].y,xj=pts[j].x,yj=pts[j].y;if(((yi>ny)!=(yj>ny))&&(nx<(xj-xi)*(ny-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
+function polyCentroid(pts){let cx=0,cy=0;pts.forEach(p=>{cx+=p.x;cy+=p.y;});return{x:cx/pts.length,y:cy/pts.length};}
+function findIncidentAt(nx,ny){
+  if(!mapImg)return null;
+  const HR=14/(mapImg.naturalWidth*vp.scale), HRY=14/(mapImg.naturalHeight*vp.scale);
+  const f=getFiltered();
+  for(let i=f.length-1;i>=0;i--){const inc=f[i];if(inc.x==null||inc.y==null)continue;if(Math.abs(inc.x-nx)<HR&&Math.abs(inc.y-ny)<HRY)return inc;}
+  return null;
+}
+
+// ─── SCORE COLOR ──────────────────────────────────────────────────────────
+function scoreColor(t){if(t<0.001)return{r:79,g:142,b:247,a:0.15};let r,g,b;if(t<0.5){const s=t/0.5;r=Math.round(79+(34-79)*s);g=Math.round(142+(201-142)*s);b=Math.round(247+(122-247)*s);}else if(t<0.75){const s=(t-0.5)/0.25;r=Math.round(34+(245-34)*s);g=Math.round(201+(166-201)*s);b=Math.round(122+(35-122)*s);}else{const s=(t-0.75)/0.25;r=Math.round(245+(232-245)*s);g=Math.round(166+(83-166)*s);b=Math.round(35+(74-35)*s);}return{r,g,b,a:0.18+t*0.62};}
+
+// ─── DRAW ─────────────────────────────────────────────────────────────────
+
+function drawMap(){
+  const canvas=document.getElementById('mapCanvas');if(!canvas||!mapImg)return;
+  const ctx=canvas.getContext('2d');const cw=canvas.width,ch=canvas.height;
+  ctx.clearRect(0,0,cw,ch);ctx.fillStyle='#1a1d27';ctx.fillRect(0,0,cw,ch);
+  ctx.save();ctx.translate(vp.ox,vp.oy);ctx.scale(vp.scale,vp.scale);
+  const iw=mapImg.naturalWidth,ih=mapImg.naturalHeight;
+  ctx.drawImage(mapImg,0,0,iw,ih);
+  const filtered=getFiltered();
+  const fs=Math.round(13/vp.scale),dotR=Math.round(9/vp.scale),dotRO=Math.round(14/vp.scale),dotRP=Math.round(18/vp.scale);
+  function ni(nx,ny){return{x:nx*iw,y:ny*ih};}
+  function drawZP(zone,sc,fc){
+    if(!zone.pts||zone.pts.length<2)return;
+    ctx.beginPath();const p0=ni(zone.pts[0].x,zone.pts[0].y);ctx.moveTo(p0.x,p0.y);
+    for(let i=1;i<zone.pts.length;i++){const p=ni(zone.pts[i].x,zone.pts[i].y);ctx.lineTo(p.x,p.y);}
+    ctx.closePath();
+    if(fc){ctx.fillStyle=fc;ctx.fill();}
+    if(sc){ctx.strokeStyle=sc;ctx.lineWidth=2/vp.scale;ctx.stroke();}
+  }
+  if(heatMode){
+    const scores=new Array(zones.length).fill(0);
+    filtered.forEach(inc=>{if(inc.x==null||inc.y==null)return;zones.forEach((z,zi)=>{if(ptInPoly(inc.x,inc.y,z.pts))scores[zi]+=(TYPES[inc.type]?.weight||1);});});
+    const maxScore=Math.max(1,...scores);
+    zones.forEach((z,zi)=>{
+      const raw=scores[zi],t=raw/maxScore,c=scoreColor(t);
+      drawZP(z,`rgba(${c.r},${c.g},${c.b},0.9)`,`rgba(${c.r},${c.g},${c.b},${c.a})`);
+      const cen=polyCentroid(z.pts);const cp=ni(cen.x,cen.y);
+      ctx.textAlign='center';ctx.font=`bold ${fs}px Inter,sans-serif`;ctx.fillStyle='#fff';
+      ctx.shadowColor='rgba(0,0,0,.85)';ctx.shadowBlur=6/vp.scale;
+      ctx.fillText(z.name,cp.x,cp.y);ctx.shadowBlur=0;ctx.textAlign='left';
+    });
+  } else {
+    zones.forEach(z=>{
+      const parts=z.fill.split('|');
+      drawZP(z,parts[1],null); // stroke only
+      const cen=polyCentroid(z.pts);const cp=ni(cen.x,cen.y);
+      ctx.font=`bold ${fs}px Inter,sans-serif`;ctx.fillStyle=parts[1];
+      ctx.fillText(z.name,cp.x-ctx.measureText(z.name).width/2,cp.y);
+    });
+    filtered.forEach(inc=>{
+      if(inc.x==null||inc.y==null)return;
+      const p=ni(inc.x,inc.y),col=TYPES[inc.type]?.color||'#888';
+      if(tooltip.incId===inc.id){ctx.beginPath();ctx.arc(p.x,p.y,dotRP,0,Math.PI*2);ctx.fillStyle=col+'22';ctx.fill();ctx.strokeStyle=col+'88';ctx.lineWidth=1.5/vp.scale;ctx.stroke();}
+      ctx.beginPath();ctx.arc(p.x,p.y,dotRO,0,Math.PI*2);ctx.fillStyle=col+'2a';ctx.fill();
+      ctx.beginPath();ctx.arc(p.x,p.y,dotR,0,Math.PI*2);ctx.fillStyle=col+'ee';ctx.fill();
+      ctx.strokeStyle=col;ctx.lineWidth=2/vp.scale;ctx.stroke();
+    });
+    if(tooltip.incId){
+      const inc=incidents.find(i=>i.id===tooltip.incId);
+      if(inc&&inc.x!=null&&inc.y!=null){
+        const p=ni(inc.x,inc.y),col=TYPES[inc.type]?.color||'#888';
+        const title=inc.title||(TYPES[inc.type]?.label||'Olay');
+        const meta=(TYPES[inc.type]?.label||'')+(inc.zone?' · '+inc.zone:'')+(inc.date?' · '+inc.date:'')+(inc.time?' '+inc.time:'');
+        const desc=inc.desc||'';
+        const pad=12/vp.scale,lh=19/vp.scale,fst=12/vp.scale;
+        ctx.font=`bold ${fst}px Inter,sans-serif`;let maxW=ctx.measureText(title).width;
+        ctx.font=`${10/vp.scale}px Inter,sans-serif`;maxW=Math.max(maxW,ctx.measureText(meta).width,desc?ctx.measureText(desc).width:0);
+        const bw=maxW+pad*2,bh=pad+(desc?lh*3:lh*2)+pad*0.6;
+        let tx=p.x+16/vp.scale,ty=p.y-bh/2;if(tx+bw>iw)tx=p.x-bw-16/vp.scale;if(ty<4)ty=4;if(ty+bh>ih)ty=ih-bh-4;
+        const r=7/vp.scale;function rr(x,y,w,h){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+        ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=14/vp.scale;ctx.fillStyle='#1a1d27f5';rr(tx,ty,bw,bh);ctx.fill();ctx.shadowBlur=0;
+        ctx.strokeStyle=col;ctx.lineWidth=1.5/vp.scale;rr(tx,ty,bw,bh);ctx.stroke();
+        ctx.fillStyle=col+'55';ctx.beginPath();ctx.moveTo(tx+r,ty);ctx.lineTo(tx+bw-r,ty);ctx.quadraticCurveTo(tx+bw,ty,tx+bw,ty+r);ctx.lineTo(tx+bw,ty+5/vp.scale);ctx.lineTo(tx,ty+5/vp.scale);ctx.lineTo(tx,ty+r);ctx.quadraticCurveTo(tx,ty,tx+r,ty);ctx.closePath();ctx.fill();
+        ctx.font=`${10/vp.scale}px Inter,sans-serif`;ctx.fillStyle='#555b75';ctx.textAlign='right';ctx.fillText('× kapat',tx+bw-8/vp.scale,ty+bh-7/vp.scale);
+        let py=ty+pad+lh-3/vp.scale;ctx.textAlign='left';
+        ctx.font=`bold ${fst}px Inter,sans-serif`;ctx.fillStyle='#e8eaf2';ctx.fillText(title,tx+pad,py);py+=lh;
+        ctx.font=`${10/vp.scale}px Inter,sans-serif`;ctx.fillStyle='#8b90a8';ctx.fillText(meta,tx+pad,py);py+=lh;
+        if(desc){ctx.fillStyle='#6b7090';let d=desc;while(d.length>0&&ctx.measureText(d).width>bw-pad*2)d=d.slice(0,-1);if(d!==desc)d=d.slice(0,-1)+'…';ctx.fillText(d,tx+pad,py);}
+        ctx.textAlign='left';
+      }
+    }
+  }
+  ctx.restore();
+  ctx.font='11px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,0.3)';ctx.textAlign='right';
+  ctx.fillText(`${Math.round(vp.scale*100)}%  |  Tekerlek: zoom  Sürükle: kaydır  Çift tık: sıfırla`,cw-10,ch-8);
+  ctx.textAlign='left';
+}
+
+// ─── CANVAS EVENTS ────────────────────────────────────────────────────────
+const canvas=document.getElementById('mapCanvas');
+function cn(e){
+  const r=canvas.getBoundingClientRect();
+  const cx=(e.clientX-r.left)*(canvas.width/r.width);
+  const cy=(e.clientY-r.top)*(canvas.height/r.height);
+  return canvasToNorm(cx,cy);
+}
+function cpx(e){
+  const r=canvas.getBoundingClientRect();
+  return{x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)};
+}
+canvas.addEventListener('wheel',e=>{
+  if(!mapImg)return;e.preventDefault();
+  const p=cpx(e);const delta=e.deltaY>0?0.85:1.18;
+  const ns=Math.max(0.1,Math.min(vp.scale*delta,10));
+  vp.ox=p.x-(p.x-vp.ox)*(ns/vp.scale);vp.oy=p.y-(p.y-vp.oy)*(ns/vp.scale);vp.scale=ns;drawMap();
+},{passive:false});
+canvas.addEventListener('dblclick',e=>{fitCanvas();drawMap();});
+canvas.addEventListener('mousedown',e=>{
+  if(e.button===0){const n=cn(e);if(!findIncidentAt(n.x,n.y)){vp.dragging=true;const p=cpx(e);vp.lastX=p.x;vp.lastY=p.y;}}
+});
+canvas.addEventListener('mouseup',()=>{vp.dragging=false;});
+canvas.addEventListener('mouseleave',()=>{vp.dragging=false;});
+canvas.addEventListener('mousemove',e=>{
+  const p=cpx(e);
+  if(vp.dragging){vp.ox+=p.x-vp.lastX;vp.oy+=p.y-vp.lastY;vp.lastX=p.x;vp.lastY=p.y;drawMap();return;}
+  const n=canvasToNorm(p.x,p.y);canvas.style.cursor=findIncidentAt(n.x,n.y)?'pointer':'grab';
+});
+canvas.addEventListener('click',e=>{
+  const n=cn(e);const hit=findIncidentAt(n.x,n.y);
+  if(hit){tooltip.incId=(tooltip.incId===hit.id)?null:hit.id;}else{tooltip.incId=null;}
+  drawMap();
+});
+
+// ─── AUTO REFRESH her 30 saniyede ─────────────────────────────────────────
+setInterval(async()=>{
+  if(!curTesisId) return;
+  try{
+    const [inc,zon]=await Promise.all([
+      sbGet('olaylar',`tesis_id=eq.${curTesisId}&order=created_at.asc`),
+      sbGet('zonlar', `tesis_id=eq.${curTesisId}&order=created_at.asc`)
+    ]);
+    const newInc=inc.map(r=>({id:r.id,type:r.type,title:r.title,zone:r.zone,date:r.date,time:r.time,desc:r.aciklama,x:r.x,y:r.y}));
+    const newZon=zon.map(r=>({name:r.name,fill:r.fill,pts:r.pts}));
+    if(JSON.stringify(newInc)!==JSON.stringify(incidents)||JSON.stringify(newZon)!==JSON.stringify(zones)){
+      incidents=newInc;zones=newZon;
+      updateStats();updateZoneSel();drawMap();
+      document.getElementById('lastRefresh').textContent='Son güncelleme: '+new Date().toLocaleTimeString('tr-TR');
+    }
+  }catch(e){console.error(e);}
+},30000);
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+window.addEventListener('resize',()=>{resizeCanvas();drawMap();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&curTesisId)refreshData();});
+loadTesisler();
+</script>
+</body>
+</html>
