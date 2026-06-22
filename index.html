@@ -472,52 +472,492 @@ const SHEETS_CSV_URL = "";
 // ══════════════════════════════════════════════
 const DEMO_DATA = [
   {
-    "ad_soyad": "SİNAN TOLGA BİR",
-    "bildirim_tarihi": "22.05.2026",
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "20.06.2026",
     "durum": "Devam Ediyor",
-    "tespit": "Gebze 2 idare bina önündeki yerde bulunan zemine montaj yapilan işildaklar araca binerken ve inerken gormeden ustune basilmasindan dolayi ayak donmesi ve ayak takilmasi yasadim bundan dolayida ayak bilegim ufak capta agri oldu",
-    "oneri": "Yerde bulunan işildaklarin zemine gomulmesi yada daha uygun bi i?ildak takilmasi",
+    "tespit": "Subazlı Yeni tesisteki ortam şartları çok tozlu",
+    "oneri": "Toz emiş sitemi sağlanabilir",
     "alinanan_aksiyon": ""
   },
   {
     "ad_soyad": "HAKAN BÖLÜK",
-    "bildirim_tarihi": "21.05.2026",
+    "bildirim_tarihi": "20.06.2026",
     "durum": "Devam Ediyor",
+    "tespit": "Subazlı Yeni tesisteki tavanda bulunan şeffaf aydınlatma sistemindeki havalandırma kapakları aktif değil.",
+    "oneri": "Aktif hale gelmesi sağlanmalı",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ÖZKAN SERÇEOĞLU",
+    "bildirim_tarihi": "20.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "tavan daki kapak parcasi yerinden cikmiş , parca düşmek uzere",
+    "oneri": "Daha dikkatli calişabilinir  montaj daha dikkatli takılabilir saglamligi kontrol edelmeli",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "MUSTAFA ALTUN",
+    "bildirim_tarihi": "18.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Gebze 2 güvenlik girişinde bulunan dogalgaz kutusu çevresinde ki kurumuş otlar yangın tehlikesi yaratmaktafir",
+    "oneri": "Otların temizlenmesi gereklidir",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "17.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Subazlı 2 yeni hatta bulunan hat1 kuşak sonrası konveyör kenar dayamaları alçak kaldığından hareket halindeki palet dayamanin üzerine çıkıyor.",
+    "oneri": "Dayamaların derinliği artırılıp zincirden yüksekliği sağlanabilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "BURHAN GELENBEY",
+    "bildirim_tarihi": "17.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Su bazlı üretim işletmesi karşısında olan kediden veya kedilerden dolayı iş kazası yaşanabilir kedi fobisi olan personeller var ve ondan korktuğu için aracın yoldan geçmesi esnasında korkudan yola fırlayıp ciddi bir kazaya neden olabilir",
+    "oneri": "Kedilerin daha uygun bir yere yol kenarlarında değil örnek olarak halisaha çevresine kulübesi yapılabilir",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "BİLAL OKUYUCULAR",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Gebze 2 Solvent mamul depoda bulunan birçok aydınlatmalar çalışmıyor Buda çalışan operatörler için büyük risk taşıyor.\nPersonel birçok raf arasında düşük aydınlatma olduğu için kaza riski atlatabiliyor.",
+    "oneri": "Aydınlatmaların onarılması depolarda görüş açısının artması kazaların önüne geçebilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "BİLAL OKUYUCULAR",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Gebze 2 depo sigara içme alanında bulunan içme suyu damacanaları açık alanda ısıya(güneşe) maruz kalıyor ve ciddi sağlık riski taşıyor.",
+    "oneri": "Damacanaları her zaman güneş görmeyen ve kuru ortamlarda muhafaza etmemiz gerekiyor.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "FERRUH ÇAKIR",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "34 BTY 287 plakalı aracın Lift kumanda kutusu yoktur.Yolda giderken düşme tehlikesi vardır.Yağışlı havalarda kumanda içine su girmesi durumunda bozulabilir.",
+    "oneri": "Lift kumandası için koruma kutusu yapılmalıdır.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ÖZCAN AKGÜN",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Arkada dış alanlardan yoğun yağışlarda sarmal kapının altından su deponun içine dolmaktadır",
+    "oneri": "Sarmal kapının altına boru izolasyon malzemesi ile sızdırmazlık sağlanarak suyun depoya girişi engellenmelidir",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "EMRAH KIVILCIM",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Arka dış zeminde bulunan su depo kapağı saç levha ile kaplıdır. Zeminde ki suyun su deposuna akışını kesmektedir",
+    "oneri": "Saç levha yerine ızgaralı demir sistemi yapılarak yağışlı havalarda suyun depoya akışı sağlanmalıdır.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ÖMER DOĞAN",
+    "bildirim_tarihi": "16.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Gebze 1 mamul depo karton istiflenen rafların kapıları\n\nKarton istiflediğimiz kapılar bozuk. Raylardan çıkmış durumda.risk teşkil ediyor.",
+    "oneri": "Kapılar tekrar gözden geçirilmesi gerekmektedir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ÖZKAN EKİNCİ",
+    "bildirim_tarihi": "15.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Meydan manuel kuşaklama alani iş makinalari geciş yolu dar eminiyet şeridi cekilen alanda tahribat meydana geliyor sürekli vidalar acikta kaliyor ayagim takildi bildirmek istedim saygilar.",
+    "oneri": "Yol dar genişletme gerekiyor",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "TAYFUR ÇOLAK",
+    "bildirim_tarihi": "22.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Yangın hattının önüne palet konulmulması",
+    "oneri": "Paletlerin kaldırılması ve yangın hatlarının önünün her zaman açık tutulması",
+    "alinanan_aksiyon": "paletler alandan aldırılmış ve personellere alanın boş bırakılması konusunda uyarılarda bulunulmuştur."
+  },
+  {
+    "ad_soyad": "MUSTAFA SAFALI",
+    "bildirim_tarihi": "15.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Yükleme rampalarında yangın tüpü bulunmaması",
+    "oneri": "Yönetmelikte belirtildiği üzere her 250 m2 için en az 1 tane yangın tüpü alana eklenmelidir.",
+    "alinanan_aksiyon": "Yükleme alanına 5 adet ilave yangın tüpü eklenmiştir. Alanda toplamda 7 yangın tüpü olası bir yangın anında müdahale için hazır hale getirilmiştir."
+  },
+  {
+    "ad_soyad": "ONUR KARAAĞAÇ",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Su bazlı mamul depo\n\n3,6 ve 11. Koridorda zeminde bulunan çatlaklardan dolayı reach truck ve toplama makinalarının lastikleri normal süresinden daha hızlı deforme olmaktadır. bu durum yıl içerisinde daha fazla lastik değişimine sebep olduğu için maliyetleri yükseltmektedir.",
+    "oneri": "Koridorlarda uygun zamanlarda zemin düzeltmesi yapılması bu sorunu önleyecektir.",
+    "alinanan_aksiyon": "Betek-İnşaat Malzeme İrsaliye grubundan anlık depo zemin ve inşaat işleri paylaşılarak hafta sonlarında aksiyon alınmaktadır. Bu durum rutin devam etmektedir. belirtilen 3,6,11 koridorların belirli alanlarında aksiyon alındı 2. fotoğrafta görüleceği üzere"
+  },
+  {
+    "ad_soyad": "ONUR KARAAĞAÇ",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Su bazlı mamul depo (7.koridor)\n\nSu bazlı mamul depo 7. Koridorda aydınlatma yanıp sönmektedir. Bu durum özellikle reach truck kullanan operatörler için göz yanılsamasına sebep olmaktadır.",
+    "oneri": "Aydınlatmanın değiştirilmesi sorunu giderecektir.",
+    "alinanan_aksiyon": "Arızalı florasan değiştirlmiştir"
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sb2 proses binası 1. kat T1204 Letdown takından kalite numunesini aldıktan sonra melon kapağını kapatmak veya numune alma kepçesini bırakmak için operatör kavanozu zemine koyarken eğiliyor. Bel için ergonomik olmuyor. Yere bırakılan numune kavanozunun devrilme ve yere dökülme riski var.",
+    "oneri": "T1204 letdown tankı yakınına, Numune alma kavanozunu operatörün eğilmeyeceği bir şekilde bel hizasında bir sehpa yapılması ile eğilme sonucu ergonomi rahatsızlıkları, sehpanın yanlarınada yükselti yapılarak devrilme sonucu zemine boya dökülmeleri engellenmiş olur.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sb2 proses binası 1. kat T1203 Letdown takından kalite numunesini aldıktan sonra melon kapağını kapatmak veya numune alma kepçesini bırakmak için operatör kavanozu zemine koyarken eğiliyor. Bel için ergonomik olmuyor. Yere bırakılan numune kavanozunun devrilme ve yere dökülme riski var.",
+    "oneri": "T1203 letdown tankı yakınına, Numune alma kavanozunu operatörün eğilmeyeceği bir şekilde bel hizasında bir sehpa yapılması ile eğilme sonucu ergonomi rahatsızlıkları, sehpanın yanlarınada yükselti yapılarak devrilme sonucu zemine boya dökülmeleri engellenmiş olur.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sb2 proses binası 1. kat T1202 Letdown takından kalite numunesini aldıktan sonra melon kapağını kapatmak veya numune alma kepçesini bırakmak için operatör kavanozu zemine koyarken eğiliyor. Bel için ergonomik olmuyor. Yere bırakılan numune kavanozunun devrilme ve yere dökülme riski var.",
+    "oneri": "T1202 letdown tankı yakınına, Numune alma kavanozunu operatörün eğilmeyeceği bir şekilde bel hizasında bir sehpa yapılması ile eğilme sonucu ergonomi rahatsızlıkları, sehpanın yanlarınada yükselti yapılarak devrilme sonucu zemine boya dökülmeleri engellenmiş olur.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sb2 proses binası birinci kat T1201 Letdown takından kalite numunesini aldıktan sonra melon kapağını kapatmak veya numune alma kepçesini bırakmak için operatör kavanozu zemine koyarken eğiliyor. Bel için ergonomik olmuyor. Yere bırakılan numune kavanozunun devrilme ve yere dökülme riski var.",
+    "oneri": "T1201 letdown tankı yakınına, Numune alma kavanozunu operatörün eğilmeyeceği bir şekilde bel hizasında bir sehpa yapılması ile eğilme sonucu ergonomi rahatsızlıkları, sehpanın yanlarınada yükselti yapılarak devrilme sonucu zemine boya dökülmeleri engellenmiş olur.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "SB2 Proses binası birinci kat. Birinci kat tavanında bulunan bazı metal borular içinden geçen ürün sıcaklığı ile ortam sıcaklığı arasındaki farktan dolayı yoğuşma (terleme) yapmaktadır. Yoğuşma ile yürüyüş yolları ve çalışma alanları ıslanıyor. Islanmadan dolayı kaygan zemin oluyor, düşme ve yaralanmalar olabilir. İş kazalarına neden olur.",
+    "oneri": "Yoğuşma olan metal borulara izolasyon yapılarak ısı farkı engellenmiş olur. Zemin kuru kalacağı için kaza yaşanmaz.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "YASİN BAYSAL",
+    "bildirim_tarihi": "13.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "SB2 Proses binası zemin kat. Zemin kat tavanında bulunan bazı metal borular sıcak içinden geçen ürün sıcaklığı ile ortam sıcaklığı arasındaki farktan dolayı yoğuşma (terleme) yapmaktadır. Yoğuşma ile yürüyüş yolları ve çalışma alanları ıslanıyor. Islanmadan dolayı kaygan zemin oluyor, düşme ve yaralanmalar olabilir. İş kazalarına neden olur.",
+    "oneri": "Yoğuşma olan metal borulara izolasyon yapılarak ısı farkı engellenmiş olur. Zemin kuru kalacağı için kaza yaşanmaz.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "SİNAN TOLGA BİR",
+    "bildirim_tarihi": "12.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Subazli uretim karisinda bulunan yaya yolunda bulunan agaclarin ari ve boceklerden dolayi gecerken yuzumuze gelmesinden dolayi yuruyus yolunun cok kullanisli bulunmuyor",
+    "oneri": "Yol ustunde bulunan agaclarin duzgun sekilde budanmasi gerekiyor",
+    "alinanan_aksiyon": "Bu alanda ağaçlarda yapılabilecek budama işlemi yapılmıştır. Bundan sonraki işlemi ağaçlara zarar verecektir."
+  },
+  {
+    "ad_soyad": "TURGUT KARAMAN",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Maviye yaka  yemekhane gidiş .kaldırım üzeri ve merdiven kısmındaki ışıklandırma yetersiz personel herhangi bir yerlere takılıp düşebilir",
+    "oneri": "Mevcuttaki aydınlatmaların gözden geçirilmesi ve tamirlerinin yapılması",
+    "alinanan_aksiyon": "Alandaki aydınlatmalar için bakıma bildirim açıldı"
+  },
+  {
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Subazlı Yeni tesisteki elektrik panoları üzerindeki yazılı uyarı levhaları A4 kağıdı ile yazılmış.",
+    "oneri": "Yanmaz uyarı levhaları takılabilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "AYKUT YEŞİL",
+    "bildirim_tarihi": "10.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Şu bazlı mamül depoları fırça depo malzeme yükleme indirme rampasının altında bulunan demirler kırılmış olup düşme tehlikesi mevcuttur.",
+    "oneri": "Tadilatı yapılabilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "AYKUT YEŞİL",
+    "bildirim_tarihi": "10.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Şu bazlı mamül depoları 12. Koridorda raflar arasında yukarıda asılı duran acil çıkış tabelasının 2 zincirinden 1i kopmuş ve düşme tehlikesi mevcut.",
+    "oneri": "Tabela sabitlenebilir.",
+    "alinanan_aksiyon": "Tabela sabitlenmiştir"
+  },
+  {
+    "ad_soyad": "BURAK İPEK",
+    "bildirim_tarihi": "10.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Subazlı 1 önü yola yeni yapılan korkuluğun olduğu bölümde yola taşan ağaç yaprakları kaynaklı karşılıklı 2 kişinin geçmesi güç bir hal almıştır.",
+    "oneri": "Sıkışıklığa neden olan ağacın budanması",
+    "alinanan_aksiyon": "Su bazlı tesisi için en son budama işlemi sonrası yapılacak işlem ağaca zarar verecektir. Bu hali son hali olarak değerlendirilmiştir. Daha önce ki dönemlerde yapılan ekstra budamalarda ağaçların hali de eklidir. Ağacın kesimi için üst yönetimin onayı gereklidir."
+  },
+  {
+    "ad_soyad": "MÜSTEKİM TOPÇAKAN",
+    "bildirim_tarihi": "08.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Gebze 4 alanında sıfır (0) aydınlatma göz gözü görmüyor bu alanın derhal ivedi bir şekilde aydınlatma yapılması şart olabilecek her türlü kazadan iş yeri sorumludur ve alanın yetersiz kalması iş ve çevre kazasına davetiye çıkarmaktadır sayin yetkililer bu konuda desteğinize ihtiyacımız vardır.",
+    "oneri": "Çadır olmadığın dolayı aydınlatma yapılmıyor en azından seyyar ışıklandırma ile geçici önlem alınabilir gerçekten kazaya davetiye çıkartıyor bu konu geri dönüşü olmayan sonuçlar doğurabilir bilginize arz ederim.",
+    "alinanan_aksiyon": "Seç birimimiz tarafından gece operasyonları için alan kapatılmıştır"
+  },
+  {
+    "ad_soyad": "RECEP KAZEL",
+    "bildirim_tarihi": "08.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Yeni su bazlı toz hammadde sahası kullanılan kimyasalların SDS (MKK) formları bulunmamaktadır.  Ortam boşaltılan torbaların tozu ile yoğun bir atmosfer oluşturuyor. Kimysal maruziyet in olduğu bir alan.",
+    "oneri": "Ortamın iyi bir şekilde havalandırma filtreleme sistemi yapılması, boşaltılan her bir kimyasalın SDS formunun ortamda bulundurulması",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "SERCAN DEMİREL",
+    "bildirim_tarihi": "12.06.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "38gc997 Plakalı sevkiyat aracımızın arkasında bulunan lift in indirme ve kaldırmaya yarayan sol piston dişlisinin yerinden çıkmış olduğu gözlenmektedir. Trafikte veya yükleme esnasında düşebilir. (Sarı Kart)",
+    "oneri": "Yetkili servise gidip aşınmış olan parçanın tamiri veya değiştirilmesi gerekmektedir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "SERCAN DEMİREL",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "38gc997 Plakalı aracımızda kullanmakta olduğumuz transpaletin fren teli kopmasından dolayı ürün taşıması sırasında ürünler devrilip çevre kazası yaşanabilir. (Sarı Kart)",
+    "oneri": "Fren teli kopan transpaletin fren teli tamiri yapılması gerekmektedir.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "SERCAN DEMİREL",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "MUĞLA BÖLGE DEPOMUZDA BULUNAN 34BVL101 PLAKALI ARAÇTA KULLANMAKTA OLDUĞUMUZ TRANSPALET TEKERLEKLERİN AŞINMA SEBEBİ İLE KULLANIMA UYGUN DEĞİLDİR. AYRICA DENGE PİMLERİAŞINMIŞ OLUP DEĞİŞİMİ GEREKMEKTEDİR. (SARI KART)",
+    "oneri": "DENGE PİM VE TEKERLEKLERİN DEĞİŞMESİ GEREKMEKTEDİR.",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "SABAHATTİN EREK",
+    "bildirim_tarihi": "12.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Eps ön şişirme operatör alanın çok sıcak olması kaynaklı. Sıkıntı ve daralma yaşamaktayız.",
+    "oneri": "Alanın havalandırılması",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "HASAN DIĞRAK",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gri şişirme makinesinin şişirme haznesinin üzeri çok kaygan olduğu için düşme riski bulunmaktadır.",
+    "oneri": "Temizlik sıklığının arttırılması",
+    "alinanan_aksiyon": "Alan temizletilmiştir. Ayrıca alan 15 günde bir rutin temizlik programına alınmıştır."
+  },
+  {
+    "ad_soyad": "ÖMER KARAAĞAÇ",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Fensin devre dışı bırakılması",
+    "oneri": "Fensin tekrar yerine takılıp çalışmaya o şekilde devam edilmesi",
+    "alinanan_aksiyon": "Fens kapatılmıştır."
+  },
+  {
+    "ad_soyad": "MUSTAFA SAFALI",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Fensin sökülmüş olması",
+    "oneri": "Fensin tekrar yerine takılması gerekmektedir.",
+    "alinanan_aksiyon": "Fens kapatılmıştır."
+  },
+  {
+    "ad_soyad": "HASAN DIĞRAK",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gri şişirme makinesinin şişirme haznesinin üzeri çok kaygan olduğu için düşme riski bulunmaktadır.",
+    "oneri": "Temizlik sıklığının arttırılması",
+    "alinanan_aksiyon": "Alan temizletildi ve 15 günde bir rutin olarak temizletilmesine karar verirdi."
+  },
+  {
+    "ad_soyad": "ÖMER KARAAĞAÇ",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Fensin devre dışı bırakılması",
+    "oneri": "Fensin tekrar yerine takılıp çalışmaya o şekilde devam edilmesi",
+    "alinanan_aksiyon": "Fens yerine takılmıştır."
+  },
+  {
+    "ad_soyad": "MUSTAFA SAFALI",
+    "bildirim_tarihi": "11.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Fensin sökülmüş olması",
+    "oneri": "Fensin tekrar yerine takılması gerekmektedir.",
+    "alinanan_aksiyon": "Fens kapatılmıştır."
+  },
+  {
+    "ad_soyad": "MUHAMMET AÇIKGÖZ",
+    "bildirim_tarihi": "09.06.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "Eps blok üretim işletmesi paslanmaz tank suyunu tahliye eden  pompa kaplin değişim sonrası sabitleme cıvatası tehlikeli durum oluşturmaktadır. Ele çapma veya birinin pantolonundan kaparak kaza riski oluşturmaktadır.",
+    "oneri": "Kaplin bölgesindeki emniyet muhafazasının genişletilmesi ve sağlamlaştırılması",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ÖNDER POLAT",
+    "bildirim_tarihi": "01.05.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gebze 4 atık sahası aydınlatma",
+    "oneri": "Aydınlatma takılması",
+    "alinanan_aksiyon": "Aydınlatma çalışması yapıldı onay verilmedi"
+  },
+  {
+    "ad_soyad": "GÖRKEM YAVUZ",
+    "bildirim_tarihi": "06.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Solven mamul depo mamul bazlı bölgelerde aydıtmalayı eksikliği var",
+    "oneri": "Aydınlatmalar elden geçmesi gerekli",
+    "alinanan_aksiyon": "Çalışmayan aydınlatmalar değiştirildi"
+  },
+  {
+    "ad_soyad": "ALİ ALBAYRAK",
+    "bildirim_tarihi": "04.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Yeni yapılan. Korkulukların olduğu yürüme yolunda bulunan ağaçlar bacaklarımıza ve kollarımıza çarpıyor çiziyor",
+    "oneri": "Yol üzerinde bulunan çamların  budanması  gerekiyor yem yol genişlemiş olur hemde yayalara temas etmez",
+    "alinanan_aksiyon": "Alanda yapılan budama işlemleri sonrası son halini almıştır."
+  },
+  {
+    "ad_soyad": "HASAN GÜLCAN",
+    "bildirim_tarihi": "02.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sentetik üretim işletmesi tank sahası tarafında bulunan İKİ KATLI PANO ODASInın alt kat girişinde toprakşama levhası yok",
+    "oneri": "topraklama levhası takılmalı",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "HASAN GÜLCAN",
+    "bildirim_tarihi": "02.06.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "Sentetik üretim işletmesi tank sahası tarafındaki acil çıkış kapısının ve yanında bulunan \"p.o12\" kapı numaralı pano odasının girişinde topraklama levhası yok",
+    "oneri": "topraklama levhası takılmalı",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "HAKAN ÇALIŞKAN",
+    "bildirim_tarihi": "02.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Polimer monomer tank sahası üstü aşırı otlanma var kurudugunda yangın çıkma riskivar",
+    "oneri": "Otların kesilmesi ot çıkmaması için ot ilaçlama yapılması",
+    "alinanan_aksiyon": "Alanın otu biçilerek temizlik yapıldı."
+  },
+  {
+    "ad_soyad": "ÖMER YENİLMEZ",
+    "bildirim_tarihi": "05.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Silobas numune alma yerinde bulunan yaşam halatının bağlantı kancasının emniyet mandalının kapanmadığı gözlemlenmiştir.",
+    "oneri": "Emniyet Mandalının tamir edilmesi gerekmektedir.",
+    "alinanan_aksiyon": "Yoyonun emniyet mandalı değiştirilmiş olup yeniden kullanıma hazır hale getirilmiştir."
+  },
+  {
+    "ad_soyad": "ÖMER YENİLMEZ",
+    "bildirim_tarihi": "05.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Silobas numune alma yerinde bulunan paraşüt tipi emniyet kemerinde hasarla oluştuğu gözlemlenmiştir.",
+    "oneri": "Paraşüt tipi emniyet kemerin yenisiyle değiştirilmesi gerekmektedir.",
+    "alinanan_aksiyon": "Emniyet kemeri yenisiyle değiştirilmiştir."
+  },
+  {
+    "ad_soyad": "FİKRET ÇETİNKAYA",
+    "bildirim_tarihi": "03.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Yangın tüpünün önü kapatılmıştır.",
+    "oneri": "Yangın tüpünün önünde ki malzeme kaldırıp uygun alana montajı yaptırılmıştır.",
+    "alinanan_aksiyon": "Yangın tüpü doluma gönderilmiş ve yerine yedek tüp takılmıştır."
+  },
+  {
+    "ad_soyad": "HASAN DIĞRAK",
+    "bildirim_tarihi": "01.06.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Yangın tüplerinin dolum yenileme tarihlerinin geçmesi",
+    "oneri": "Yangın tüpleri 04.06.2026 tarihinde gönderilmiştir. Söz konusu tüpler 08.06.2026 tarihinde dolumdan gelecektir. bu süreçte alana yedek tüp takılmıştır.",
+    "alinanan_aksiyon": "Yangın tüplerinin yedekler sahaya dağıtılmak üzere hazırlanmış ve dağıtım başlamıştır."
+  },
+  {
+    "ad_soyad": "UMUT ÖZBAL",
+    "bildirim_tarihi": "01.05.2026",
+    "durum": "Devam Ediyor",
+    "tespit": "5 nolu koridor başlangıç noktası.\nÇatı Trapezinde delik olduğundan yağmurlu havalar da zemin ıslanıyor, ekipman tekerini kaymasına neden olabilir tam viraj noktası olduğundan ekstra tehlike arzediyor.",
+    "oneri": "Çatı tamiri ile bu problem büyük bir kazaya sebebiyet vermeden çözülebilir",
+    "alinanan_aksiyon": ""
+  },
+  {
+    "ad_soyad": "ONUR KARAAĞAÇ",
+    "bildirim_tarihi": "18.05.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Su bazlı mamul depo tesisinde kullanılan 10 R 44 plakalı reach truck ekipmanındaki trio mobilden çok yüksek desibelde ses gelmektedir. Bu durum operatörün dikkatini dağıtmakta ve ses neredeyse 10 saat boyunca hiç kesilmediği için baş ağrısına sebep olmaktadır.",
+    "oneri": "Yüksek sesin verdiği olumsuz etkiden dolayı operatörün çevre veya iş kazasına sebep olmaması için trio mobil cihazının sesinin kısılması çok faydalı olacaktır.",
+    "alinanan_aksiyon": "Toyota ekibi tarafından ses düzenlemesi yapılmıştır"
+  },
+  {
+    "ad_soyad": "ONUR KARAAĞAÇ",
+    "bildirim_tarihi": "19.05.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Su bazlı mamul depo tesisinde gündüz vardiyasında koridorlarda temizlik makinası karşımıza çıkıyor. Bu makinanın ön tarafında mavi ışık olmadığı için kör noktalardan ekipmanla dönüş yaparken fark edilmesi zor oluyor.",
+    "oneri": "Temizlik makinasının ön tarafına uyarıcı mavi ışık konulursa kör noktaların olduğu araç dönüşlerinde fark edilmesi daha kolay olur.",
+    "alinanan_aksiyon": "Ekipmanda uyarıcı ışıklar mevcuttur mavi ışık değiş kırmızı ışık vardır"
+  },
+  {
+    "ad_soyad": "SİNAN TOLGA BİR",
+    "bildirim_tarihi": "22.05.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gebze 2 idare bina önündeki yerde bulunan zemine montaj yapilan işildaklar araca binerken ve inerken gormeden ustune basilmasindan dolayi ayak donmesi ve ayak takilmasi yasadim bundan dolayida ayak bilegim ufak capta agri oldu",
+    "oneri": "Yerde bulunan işildaklarin zemine gomulmesi yada daha uygun bi i?ildak takilmasi",
+    "alinanan_aksiyon": "İlgili alanda araç park alanı güncellenmesi sonrası kedi gözleri monte edilmiştir. Kedi gözleri isg açısından görselliği önemlidir. Personelleri yürüme yollarını kullanması illa bu alandan geçilecek ise kedi gözlerine dikkat ederek kendini koruması daha güvenli tarafta bizi tutacaktır."
+  },
+  {
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "21.05.2026",
+    "durum": "Tamamlandı",
     "tespit": "Gebze fabrika mavi yaka çay ocağından sigara içme alanına inerkenki merdivenlerin kaydırmaz bantları deforme olup özelliğini yitirmiştir.",
     "oneri": "Kaydırmaz özellikli bantlar yenilenmelidir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Bu alana kaydırmaz özelikli bantlar yapıştırılmıştır. Yoğun kullanımı ve deformasyonu nedeniyle farklı ürün araştırması yapılmaktadır."
   },
   {
     "ad_soyad": "ALİ ALBAYRAK",
     "bildirim_tarihi": "21.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Yemekhane alt girişten girerken  özellikle yağmurlu havalardave ıslak zeminde  farklı renkte parlak olan fayanslar kayıyor düşme tehlikesi arz ediyor. İş ayakkabısı giymemize  rağmen kayma oluyor",
     "oneri": "Kaygan fayanslar değiştirile bilir yada yüzeyleri ne  çizikler atılabilir",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Bu alandaki fayansların deformasyonu sonucu değişimi ürün tedariği netice uygun ürünler alınarak değişimleri yapılmaktadır."
   },
   {
     "ad_soyad": "MUSTAFA ÇEVRİMKAYA",
     "bildirim_tarihi": "21.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Sanayi argedeki göz yıkama duşunun eksik olması",
     "oneri": "Göz duşları  kullanıldıktan sonra tamamlanması",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Eksik göz duşu temin edilmiştir. Kanıt görsel ektedir."
   },
   {
     "ad_soyad": "ALİ ALBAYRAK",
     "bildirim_tarihi": "21.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Su bazlı işletme karşısında ki yürüme yolumun etrafına güvenlik bariyeri gerekiyor. Yürüme esnasında yakınımızdan  yüksek tonajlı araçlar geçiyor",
     "oneri": "Yürüme yolu boyunca koruyucu bariyer yapılabilir",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Bu bölge için bakımın iş planında olan bir çalışma yapılacaktır. Süreç bakıma aktarılmıştır."
   },
   {
     "ad_soyad": "HAKAN BÖLÜK",
     "bildirim_tarihi": "21.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Subazlı 1 lavaboların olduğu kısımdaki acil çıkış merdivenlerindeki kaydırmaz bantların bir kısmı deforme olmuş ve özelliğini yitirmiş. Kayıp düşme tehlikesi oluşturmaktadır.",
     "oneri": "Deforme olan bantların yenilenmesi gerekli",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "İlgili alanlardaki bantlar yenilenmiş sık kullanımı nedeniyle yeni ürün araştırması yapılmaktadır."
   },
   {
     "ad_soyad": "HAKAN BÖLÜK",
@@ -530,26 +970,10 @@ const DEMO_DATA = [
   {
     "ad_soyad": "NAİM POYAZ",
     "bildirim_tarihi": "20.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Lojistik solvent mamul depo rampa alanlarında üç katlı L şeklinde forkliftin ulaşacağı yükseklikte basit raflar yapılabilir, böylelikle müşteriye giden paletler, tır gelene kadar yerlerde üst üste değilde, paletler rampalarda Raflarda bekletilebilir, böylelikle üst üste koymaya gerek kalmaz, yer kaplamaz, paletler korunaklı kalır.",
     "oneri": "iş alanında yeni fikirler geliştirilebilir",
-    "alinanan_aksiyon": ""
-  },
-  {
-    "ad_soyad": "ONUR KARAAĞAÇ",
-    "bildirim_tarihi": "19.05.2026",
-    "durum": "Devam Ediyor",
-    "tespit": "Su bazlı mamul depo tesisinde gündüz vardiyasında koridorlarda temizlik makinası karşımıza çıkıyor. Bu makinanın ön tarafında mavi ışık olmadığı için kör noktalardan ekipmanla dönüş yaparken fark edilmesi zor oluyor.",
-    "oneri": "Temizlik makinasının ön tarafına uyarıcı mavi ışık konulursa kör noktaların olduğu araç dönüşlerinde fark edilmesi daha kolay olur.",
-    "alinanan_aksiyon": ""
-  },
-  {
-    "ad_soyad": "ONUR KARAAĞAÇ",
-    "bildirim_tarihi": "18.05.2026",
-    "durum": "Devam Ediyor",
-    "tespit": "Su bazlı mamul depo tesisinde kullanılan 10 R 44 plakalı reach truck ekipmanındaki trio mobilden çok yüksek desibelde ses gelmektedir. Bu durum operatörün dikkatini dağıtmakta ve ses neredeyse 10 saat boyunca hiç kesilmediği için baş ağrısına sebep olmaktadır.",
-    "oneri": "Yüksek sesin verdiği olumsuz etkiden dolayı operatörün çevre veya iş kazasına sebep olmaması için trio mobil cihazının sesinin kısılması çok faydalı olacaktır.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Yükleme rampalarına raf kurulumu değerlendirilmiş olup operasyonumuz acısından uygun görülmemiştir"
   },
   {
     "ad_soyad": "BERKANT AYKAN",
@@ -557,7 +981,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "Yeni tesis yükleme boşaltma alanında zeminde çukurların oluşması toprak kısmına kadar batması ve yüksek beton kalıntılarının olması",
     "oneri": "Çukur oluşan bölgelerin beton dökülerek giderilmesi \nYüksek beton kalıntılarının kırılıp düz hale getirilmesi",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Yatırım bölümüne onay verilmiştir."
   },
   {
     "ad_soyad": "YUSUF İVRENDİ",
@@ -565,15 +989,15 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "Subazlı hammadde depo pasta üretim geçiş kapısı",
     "oneri": "Pasta üretim alanından hammadde tarafına gelen suyu önlemek için  Geçiş kapısına mangal yapılması",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Uygundur"
   },
   {
     "ad_soyad": "MÜSTEKİM TOPÇAKAN",
     "bildirim_tarihi": "05.05.2026",
-    "durum": "Devam Ediyor",
+    "durum": "Tamamlandı",
     "tespit": "Su bazlı malzeme depo üst katta acil durum (444) acil telefon bulunmamaktadır olası bir acil durumda aciliyeti bildirmede geç kalınabilir ve müdahele geç kalınabilir gece vardiyesinde tek çalışan personelin bu durumu daha hızlı hale getirmek için acil durum telefonu (444) talep ediyorum",
     "oneri": "Acil durum telefonu (444) takilmasini talep ediyorum. Teşekkürler",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "444 telefon konulmuştur"
   },
   {
     "ad_soyad": "HASAN GÜLCAN",
@@ -597,7 +1021,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "BAEM / Baem alanda nbulunan ürün podyumlarının açık olmaması",
     "oneri": "Podyumlara açık olan alanlarına ek yapılabilir",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Konu anlaşılmamıştır. Problem ne , ne yapılması gerekiyor, tam olarak iletililebilinir ise, ona göre aksiyon alınacaktır..."
   },
   {
     "ad_soyad": "AZİZ ÇOLAKOĞLU",
@@ -664,14 +1088,6 @@ const DEMO_DATA = [
     "alinanan_aksiyon": ""
   },
   {
-    "ad_soyad": "ÖNDER POLAT",
-    "bildirim_tarihi": "01.05.2026",
-    "durum": "Termin Tarihi Geçmiş",
-    "tespit": "Gebze 4 atık sahası aydınlatma",
-    "oneri": "Aydınlatma takılması",
-    "alinanan_aksiyon": "Bakım ve yatırım ekibine konu aktarılmıştır, süreç onların takibindedir."
-  },
-  {
     "ad_soyad": "EROL ÇITAK",
     "bildirim_tarihi": "07.05.2026",
     "durum": "Termin Tarihi Geçmiş",
@@ -709,7 +1125,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "SB2 Toz Hammadde bölümünde yangın dolabına bağlı olan vana kapalı konumda. Olası bir yangın durumunda yangın dolabında su olmayacak.",
     "oneri": "Vana açık konuma alınması durumunda olası yangın dolabı kullanılabilinir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Vana aktiftir"
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -717,7 +1133,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "X2001 small bag istasyonunda gözlem kapaklarının açık kapalı olduğunu anlamak için pimli makaralı limit siviç kullanılmış. Gözlem kapağını açıp elle siviçe bastırılırsa istasyon çalışıyor. Bu durumda operatör veya bakım çalışanı için güvenli çalışma olmuyor.",
     "oneri": "X2001 small bag istasyonu gözlem kapaklarına manyetik siviç kullanılması gerekir. Gözlem kapakları açık olduğunda manyetik siviçlere elle bastıramadıkları için güvensiz çalışmanın önüne geçmiş olunur. Gözlem kapaklarına manyetik siviç bağlanması önerilir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Revizyon Bildirimi açılmıştır."
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -725,7 +1141,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "X2004 small bag istasyonunda gözlem kapaklarının açık kapalı olduğunu anlamak için pimli makaralı limit siviç kullanılmış. Gözlem kapağını açıp elle siviçe bastırılırsa istasyon çalışıyor. Bu durumda operatör veya bakım çalışanı için güvenli çalışma olmuyor.",
     "oneri": "X2004 small bag istasyonu gözlem kapaklarına manyetik siviç kullanılması gerekir. Gözlem kapakları açık olduğunda manyetik siviçlere elle bastıramadıkları için güvensiz çalışmanın önüne geçmiş olunur. Gözlem kapaklarına manyetik siviç bağlanması önerilir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "revziyon bildirimi açılmıştır."
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -733,7 +1149,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "X2008 small bag istasyonunda gözlem kapaklarının açık kapalı olduğunu anlamak için pimli makaralı limit siviç kullanılmış. Gözlem kapağını açıp elle siviçe bastırılırsa istasyon çalışıyor. Bu durumda operatör veya bakım çalışanı için güvenli çalışma olmuyor.",
     "oneri": "X2008 small bag istasyonu gözlem kapaklarına manyetik siviç kullanılması gerekir. Gözlem kapakları açık olduğunda manyetik siviçlere elle bastıramadıkları için güvensiz çalışmanın önüne geçmiş olunur. Gözlem kapaklarına manyetik siviç bağlanması önerilir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "revizyon bildirimi açılmıştır."
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -741,23 +1157,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "X2005 small bag istasyonunda gözlem kapaklarının açık kapalı olduğunu anlamak için pimli makaralı limit siviç kullanılmış. Gözlem kapağını açıp elle siviçe bastırılırsa istasyon çalışıyor. Bu durumda operatör veya bakım çalışanı için güvenli çalışma olmuyor.",
     "oneri": "X2005 small bag istasyonu gözlem kapaklarına manyetik siviç kullanılması gerekir. Gözlem kapakları açık olduğunda manyetik siviçlere elle bastıramadıkları için güvensiz çalışmanın önüne geçmiş olunur. Gözlem kapaklarına manyetik siviç bağlanması önerilir.",
-    "alinanan_aksiyon": ""
-  },
-  {
-    "ad_soyad": "UMUT ÖZBAL",
-    "bildirim_tarihi": "01.05.2026",
-    "durum": "Termin Tarihi Geçmiş",
-    "tespit": "5 nolu koridor başlangıç noktası.\nÇatı Trapezinde delik olduğundan yağmurlu havalar da zemin ıslanıyor, ekipman tekerini kaymasına neden olabilir tam viraj noktası olduğundan ekstra tehlike arzediyor.",
-    "oneri": "Çatı tamiri ile bu problem büyük bir kazaya sebebiyet vermeden çözülebilir",
-    "alinanan_aksiyon": ""
-  },
-  {
-    "ad_soyad": "HAKAN ÇALIŞKAN",
-    "bildirim_tarihi": "01.05.2026",
-    "durum": "Tamamlandı",
-    "tespit": "Monomer tank sahası  iki eha tarafı  hatların olduğu bölgeye çamur ibc konulmuş hatlara çok yakın forklift girerken bıçaklar hatları denebilir acil birdurumda müdahale edemeyiz",
-    "oneri": "Ibc ler ordan alınıp başka tanımlı alana koyulması gerekiyor",
-    "alinanan_aksiyon": "Alandan kaldırılmıştır"
+    "alinanan_aksiyon": "revizyon bildirimi açılmıştır."
   },
   {
     "ad_soyad": "MÜSTEKİM TOPÇAKAN",
@@ -766,6 +1166,14 @@ const DEMO_DATA = [
     "tespit": "Su bazlı malzeme depoları üst kat her yağmur yağdığında ürünler ve zemin aşırı derece de ıslanıyor pecker kullanmak aşırı zor hale geliyor transpalet kullnamak da keza öyle. Ramak kala veya iş kazasına sebebiyet verebilir. Ürünlerin islanmasi üretim tarafından büyük şikayet geri getiriyor. Paslanma olasılığı olan ürünler yer değişikliği yapiyoruz ama her taraf akıtıyor.",
     "oneri": "Çatı tadilatı yapılması yada belli yerlere su gideri yapılması en azından çek pas ile suyu temizleriz.Yerlere kova koyuyoruz ama yetersiz geliyor.",
     "alinanan_aksiyon": "Depolarımızda çatıların onarım için İnşaat biriminden teklif gelmiştir Bütçeleme döneminde 2027 yılı bütçesine aktarılacaktır"
+  },
+  {
+    "ad_soyad": "HAKAN ÇALIŞKAN",
+    "bildirim_tarihi": "01.05.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Monomer tank sahası  iki eha tarafı  hatların olduğu bölgeye çamur ibc konulmuş hatlara çok yakın forklift girerken bıçaklar hatları denebilir acil birdurumda müdahale edemeyiz",
+    "oneri": "Ibc ler ordan alınıp başka tanımlı alana koyulması gerekiyor",
+    "alinanan_aksiyon": "Alandan kaldırılmıştır"
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -816,6 +1224,22 @@ const DEMO_DATA = [
     "alinanan_aksiyon": "Tamamlanmıştır."
   },
   {
+    "ad_soyad": "ALİ KARATEPE",
+    "bildirim_tarihi": "14.04.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gebze 2 dinlenme alanı (sigara içilmeyen alan )burda bulunan plastik sandalyeler de çatlak ve kırıklar mevcut",
+    "oneri": "Sandalyelerin yenisi ile değişmesi gerek",
+    "alinanan_aksiyon": "Mevcut sandalyelerin değişimi değerlendirilecektir."
+  },
+  {
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "14.04.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "Subazlı Yeni tesisteki robot1 ve robot2 arasındaki hatta boşluk var ve robotun birisine müdehale edilirken çalisan robot tarafına geçiş yapmak mümkün.",
+    "oneri": "İki robot arasındaki boşluğa ışık perdesi yapılabilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
     "ad_soyad": "YÜCEL FİDAN",
     "bildirim_tarihi": "13.04.2026",
     "durum": "Tamamlandı",
@@ -840,22 +1264,6 @@ const DEMO_DATA = [
     "alinanan_aksiyon": ""
   },
   {
-    "ad_soyad": "ALİ KARATEPE",
-    "bildirim_tarihi": "14.04.2026",
-    "durum": "Tamamlandı",
-    "tespit": "Gebze 2 dinlenme alanı (sigara içilmeyen alan )burda bulunan plastik sandalyeler de çatlak ve kırıklar mevcut",
-    "oneri": "Sandalyelerin yenisi ile değişmesi gerek",
-    "alinanan_aksiyon": "Mevcut sandalyelerin değişimi değerlendirilecektir."
-  },
-  {
-    "ad_soyad": "HAKAN BÖLÜK",
-    "bildirim_tarihi": "14.04.2026",
-    "durum": "Termin Tarihi Geçmiş",
-    "tespit": "Subazlı Yeni tesisteki robot1 ve robot2 arasındaki hatta boşluk var ve robotun birisine müdehale edilirken çalisan robot tarafına geçiş yapmak mümkün.",
-    "oneri": "İki robot arasındaki boşluğa ışık perdesi yapılabilir.",
-    "alinanan_aksiyon": ""
-  },
-  {
     "ad_soyad": "EROL DEMİR",
     "bildirim_tarihi": "17.04.2026",
     "durum": "Tamamlandı",
@@ -877,7 +1285,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "SB2 Toz Hammadde bölümünde bulunan X2008 robotunun palet yükleme sırasında ışık perdesi aktif olmuyor. Palet yükleme sırasında ışık perleri ile palet yükleme arabası arasından çalışanlar alana girebilir. Alan girdiğinde ise yan tarafta çalışma yapan robotunda alanına girme ihtimali oluyor.",
     "oneri": "1. X2008 robotunun palet yükleme arabası yükleme konumunda olduğunda yanlardan insanların geçemeyecek kadar ve yükleme paletlerinin çarpmayacağı şekilde fens (güvenlik çiti) yapılabilinir. \n2. Sağ ve sol tarafa geçişlerde robotu ve istasyonu durduracak şekilde ışık perdesi eklenebilinir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "revizyon bildirimi açıldı"
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -885,7 +1293,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "SB2 Toz Hammadde bölümünde bulunan X2005 robotunun palet yükleme sırasında ışık perdesi aktif olmuyor. Palet yükleme sırasında ışık perleri ile palet yükleme arabası arasından çalışanlar alana girebilir. Alan girdiğinde ise yan tarafta çalışma yapan robotunda alanına girme ihtimali oluyor.",
     "oneri": "1. X2005 robotunun palet yükleme arabası yükleme konumunda olduğunda yanlardan insanların geçemeyecek kadar ve yükleme paletlerinin çarpmayacağı şekilde fens (güvenlik çiti) yapılabilinir. \n2. Sağ ve sol tarafa geçişlerde robotu ve istasyonu durduracak şekilde ışık perdesi eklenebilinir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "revizyon bildirimi açıldı"
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -893,7 +1301,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "SB2 Toz Hammadde bölümünde bulunan X2004 robotunun palet yükleme sırasında ışık perdesi aktif olmuyor. Palet yükleme sırasında ışık perleri ile palet yükleme arabası arasından çalışanlar alana girebilir. Alan girdiğinde ise yan tarafta çalışma yapan robotunda alanına girme ihtimali oluyor.",
     "oneri": "1. X2004 robotunun palet yükleme arabası yükleme konumunda olduğunda yanlardan insanların geçemeyecek kadar ve yükleme paletlerinin çarpmayacağı şekilde fens (güvenlik çiti) yapılabilinir. \n2. Sağ ve sol tarafa geçişlerde robotu ve istasyonu durduracak şekilde ışık perdesi eklenebilinir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "revizyon bildirimi"
   },
   {
     "ad_soyad": "YASİN BAYSAL",
@@ -901,7 +1309,7 @@ const DEMO_DATA = [
     "durum": "Termin Tarihi Geçmiş",
     "tespit": "SB2 Toz Hammadde bölümünde bulunan X2001 robotunun palet yükleme sırasında ışık perdesi aktif olmuyor. Palet yükleme sırasında ışık perleri ile palet yükleme arabası arasından çalışanlar alana girebilir. Alan girdiğinde ise yan tarafta çalışma yapan robotunda alanına girme ihtimali oluyor.",
     "oneri": "1. X2001 robotunun palet yükleme arabası yükleme konumunda olduğunda yanlardan insanların geçemeyecek kadar ve yükleme paletlerinin çarpmayacağı şekilde fens (güvenlik çiti) yapılabilinir. \n2. Sağ ve sol tarafa geçişlerde robotu ve istasyonu durduracak şekilde ışık perdesi eklenebilinir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Revizyon bildirimi açıldı"
   },
   {
     "ad_soyad": "MENDERES ALTUN",
@@ -962,10 +1370,10 @@ const DEMO_DATA = [
   {
     "ad_soyad": "FIRAT OZAN",
     "bildirim_tarihi": "09.04.2026",
-    "durum": "Termin Tarihi Geçmiş",
+    "durum": "Tamamlandı",
     "tespit": "Kullanmakta olduğum 20 AAT 003 plakalı sevkiyat aracımın emniyet kemeri görevini yerine getirmiyor.",
     "oneri": "Arzanın giderilmesi gerekmektedir.",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "Emniyet kemeri yenisi ile değiştirilerek arıza giderilmiştir."
   },
   {
     "ad_soyad": "HASAN GÜLCAN",
@@ -1200,6 +1608,14 @@ const DEMO_DATA = [
     "alinanan_aksiyon": ""
   },
   {
+    "ad_soyad": "HAKAN BÖLÜK",
+    "bildirim_tarihi": "13.03.2026",
+    "durum": "Termin Tarihi Geçmiş",
+    "tespit": "Subazlı Yeni tesiste bulunan palet besleme alanında sürekli palet balyesi devriliyor. Sensör ve emniyet bariyerleri kırılıp zarar görmektedir.",
+    "oneri": "Emniyet devresi ve sensörlerin önüne zarar vermeyecek şekilde metal plaka yapılabilir.",
+    "alinanan_aksiyon": ""
+  },
+  {
     "ad_soyad": "UĞUR UZUNÇINAR",
     "bildirim_tarihi": "13.03.2026",
     "durum": "Tamamlandı",
@@ -1222,14 +1638,6 @@ const DEMO_DATA = [
     "tespit": "Hatay bölge depoda bulunan reach truck makinesinde kamera bulunmamaktadır.Paletleri  raflara koyduğumuzda daha iyi takip etmemiz adına kamera takılması uygundur",
     "oneri": "Kamera takılması uygundur",
     "alinanan_aksiyon": "Hatay bölge depomuza bulunan reach truck bina sahibine ait kiralık bir makinedir. Bu makine Toyota marka olup mevcut kiralık ekipmanlarımızdan farklı olarak standart dışıdır. Deponun taşınma durumu ve kiralık ekipmanın iade durumu mevcuttur. İade durumu netleşinceye kadar güvenli çalışma koşulu ile çalışma devam edecektir."
-  },
-  {
-    "ad_soyad": "HAKAN BÖLÜK",
-    "bildirim_tarihi": "13.03.2026",
-    "durum": "Termin Tarihi Geçmiş",
-    "tespit": "Subazlı Yeni tesiste bulunan palet besleme alanında sürekli palet balyesi devriliyor. Sensör ve emniyet bariyerleri kırılıp zarar görmektedir.",
-    "oneri": "Emniyet devresi ve sensörlerin önüne zarar vermeyecek şekilde metal plaka yapılabilir.",
-    "alinanan_aksiyon": ""
   },
   {
     "ad_soyad": "EMRAH KARAKUŞ",
@@ -1280,20 +1688,12 @@ const DEMO_DATA = [
     "alinanan_aksiyon": ""
   },
   {
-    "ad_soyad": "AHMET EVBAŞ",
-    "bildirim_tarihi": "02.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "Sentetik üretim önü,araç yükleme tanımlı alanında tanımlı alanı işgal eden yükleme işlemini tehlikeye düşüren araç ve ekipmanlar bırakılması.",
-    "oneri": "Tanımlı alan çizgileri belirgin şekilde çizilip alan etrafında uyarıcı boyamalar yapılabilir",
-    "alinanan_aksiyon": "Döf hammadde hazırlamaya aittir. Görsel temsilidir."
-  },
-  {
     "ad_soyad": "İLKER ORUÇ ÖZGAN",
     "bildirim_tarihi": "09.03.2026",
-    "durum": "Termin Tarihi Geçmiş",
+    "durum": "Tamamlandı",
     "tespit": "Monomer 200 tankı askılik tan dolayı sitren vanası ni açmak için merdiven yanaşmıyor onun için monomer 200 tankının üstüne çıkıp vanayı açıyoruz iş kazası riski var yüksek ten düşme riski var yaralanma veya ölüm tehlikesi var",
     "oneri": "Monemer 200 tankına merdiven yapılması yada kolektör askılı günün yeniden dizayn edilmesi gerekiyor bilginize",
-    "alinanan_aksiyon": ""
+    "alinanan_aksiyon": "alana uygun merdiven koyulmuştur"
   },
   {
     "ad_soyad": "İLKER ORUÇ ÖZGAN",
@@ -1302,14 +1702,6 @@ const DEMO_DATA = [
     "tespit": "Tiner binasının karşısındaki tuvaletlerden çıkınca sol tarafta paletler olduğu için görülmüyor,yol kazıldığı için araçlar paletlerin olduğu yerden silme geçiyor,araç çarpma riski çok yüksek!!!",
     "oneri": "Paetlerin yüksekliği sol tarafı görecek şekilde azaltılabilir veya yol çalışması bitene kadar kaldırılsa iyi olur",
     "alinanan_aksiyon": "Kazı çalışması bitmiştir."
-  },
-  {
-    "ad_soyad": "ERTUĞRUL SÖNMEZ",
-    "bildirim_tarihi": "03.12.2025",
-    "durum": "Termin Tarihi Geçmiş",
-    "tespit": "Mobilya Boyaları Uygulama Alanı ile Girdi Kalite Laboratuvarı bölgesinde; uygulama alanı önünden Girdi Kalite Laboratuvarı önüne kadar Mobilya Boyaları ürünlerin/atık malzemelerin istiflenmesi",
-    "oneri": "Mobilya Boyaları Ürünleri için farklı bir istifleme alanı, belki depo içi. Atıl malzemelerin direkt atıla gönderilmesi.",
-    "alinanan_aksiyon": ""
   },
   {
     "ad_soyad": "HAKAN BÖLÜK",
@@ -1376,38 +1768,6 @@ const DEMO_DATA = [
     "alinanan_aksiyon": ""
   },
   {
-    "ad_soyad": "OKAN GENÇTÜRK",
-    "bildirim_tarihi": "09.02.2026",
-    "durum": "Tamamlandı",
-    "tespit": "Elektrik panosunun yalıtkan paspasi yok",
-    "oneri": "Yalıtkan paspas konulabilir",
-    "alinanan_aksiyon": "Elektrik panosunun önüne yalıtkan paspas konularak sabitlenmiştir."
-  },
-  {
-    "ad_soyad": "MUSTAFA ÖZSALİH",
-    "bildirim_tarihi": "09.02.2026",
-    "durum": "Tamamlandı",
-    "tespit": "Peron arası beton zeminde bozukluk var Rt rafa girdiğinde askıda kalıyor 01 k 13 de",
-    "oneri": "Zeminde tadilat yapılması gerekiyor",
-    "alinanan_aksiyon": "İlgili alan ekipman geçisine kapatılmıştır. Bu alanda tadilat çalılması değerlendirelecektir."
-  },
-  {
-    "ad_soyad": "GÜLSÜM AKTURAN",
-    "bildirim_tarihi": "12.02.2026",
-    "durum": "Tamamlandı",
-    "tespit": "1. Kat Teras iç kapı girişi- Yağmur yağışına bağlı kaygan zemin",
-    "oneri": "Kapı girişine paspas koyulabilir.",
-    "alinanan_aksiyon": "Paspas temin edilmiştir."
-  },
-  {
-    "ad_soyad": "ADEM HAZIRBULAN",
-    "bildirim_tarihi": "11.02.2026",
-    "durum": "Tamamlandı",
-    "tespit": "Gebze 1 otopark alanı RMI binası önünde zemin çökmesi",
-    "oneri": "Alanın düzeltilerek aksiyon alınması",
-    "alinanan_aksiyon": "Bu alanda yapılacak çalışmalar iş planına dahil edilmesi değerlendirilecektir."
-  },
-  {
     "ad_soyad": "HAKAN BÖLÜK",
     "bildirim_tarihi": "12.02.2026",
     "durum": "Tamamlandı",
@@ -1430,6 +1790,38 @@ const DEMO_DATA = [
     "tespit": "Kuru harçlar konvör ürün alışı ve kör nokta",
     "oneri": "Hem palet sitrji hasarlı olup olmadığını kontrol hemde rt operatör kör nokta kontröl için ayna takılmasını rica ediyorum",
     "alinanan_aksiyon": "Ayna takılmıştır"
+  },
+  {
+    "ad_soyad": "GÜLSÜM AKTURAN",
+    "bildirim_tarihi": "12.02.2026",
+    "durum": "Tamamlandı",
+    "tespit": "1. Kat Teras iç kapı girişi- Yağmur yağışına bağlı kaygan zemin",
+    "oneri": "Kapı girişine paspas koyulabilir.",
+    "alinanan_aksiyon": "Paspas temin edilmiştir."
+  },
+  {
+    "ad_soyad": "ADEM HAZIRBULAN",
+    "bildirim_tarihi": "11.02.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Gebze 1 otopark alanı RMI binası önünde zemin çökmesi",
+    "oneri": "Alanın düzeltilerek aksiyon alınması",
+    "alinanan_aksiyon": "Bu alanda yapılacak çalışmalar iş planına dahil edilmesi değerlendirilecektir."
+  },
+  {
+    "ad_soyad": "OKAN GENÇTÜRK",
+    "bildirim_tarihi": "09.02.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Elektrik panosunun yalıtkan paspasi yok",
+    "oneri": "Yalıtkan paspas konulabilir",
+    "alinanan_aksiyon": "Elektrik panosunun önüne yalıtkan paspas konularak sabitlenmiştir."
+  },
+  {
+    "ad_soyad": "MUSTAFA ÖZSALİH",
+    "bildirim_tarihi": "09.02.2026",
+    "durum": "Tamamlandı",
+    "tespit": "Peron arası beton zeminde bozukluk var Rt rafa girdiğinde askıda kalıyor 01 k 13 de",
+    "oneri": "Zeminde tadilat yapılması gerekiyor",
+    "alinanan_aksiyon": "İlgili alan ekipman geçisine kapatılmıştır. Bu alanda tadilat çalılması değerlendirelecektir."
   },
   {
     "ad_soyad": "ENGİN TUYGUN",
@@ -1686,46 +2078,6 @@ const DEMO_DATA = [
     "tespit": "Muğla Bölge Depomuzda bulunan 38GC997 Sevkiyat aracımızın arka kasa zemininde çatlak mevcut yükleme esnasında çökmekte olup çevre veya iş kazasına neden olabilir.",
     "oneri": "Zeminde bulunan plywood altından demirle desteklenmeli gerekirse değiştirilmelidir.",
     "alinanan_aksiyon": "Zemin tadilatı tamamlanmıştır."
-  },
-  {
-    "ad_soyad": "GÖKHAN AY",
-    "bildirim_tarihi": "25.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "Gebze 1 Den Gebze 2 İniş Rampasında Eps Şişirme Ve Solven Depo İnin Yolu Kesişimindeki Yön Aynası Kırılmış Dönüşlerde Görüş Olmadığı İçin Araçlar İçin Tehlike Yaratıyor Kaza Olma Riski Yüksek",
-    "oneri": "Ayna Yola Yakın Olduğundan Dolayı Gebze 2 Toz Sevkiyata İnen Tırlar Dönüş Yaparken Dorselerinin Takılması Sonucu Aynaya Vuruyor Aynanın Daha Geriye Alınması Bu Durumları Ortadan Kaldırabilir",
-    "alinanan_aksiyon": "Belirtilen bölgedeki yön aynası değişimi yapıldı."
-  },
-  {
-    "ad_soyad": "İBRAHİM ASAN",
-    "bildirim_tarihi": "24.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "Gebze 2 solvent mamül depo 4 A mamül depo giriş tarafında olan korkuluklar sallanıyor",
-    "oneri": "Kontroller edilip kaynak vb. Sağlamlaştırma yapılmalı",
-    "alinanan_aksiyon": "Kaynak yapılmıştır"
-  },
-  {
-    "ad_soyad": "SERDAR DOĞANCI",
-    "bildirim_tarihi": "23.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "7 ve 8. Koridorun arasındaki yolun bozukluğu",
-    "oneri": "Belirtilen koridoru yolunun geçiş alanında zeminin düzeltilmesi ile kullanılan ekipmanların ve taşınan ürünlerin daha uygun bir şekilde operasyonu tamamlanabilir.",
-    "alinanan_aksiyon": "Serdar Doğancı Anadolu bölge depo çalışanı değildir. Uygunsuzluk hatalı açılmıştır."
-  },
-  {
-    "ad_soyad": "ORHAN TAŞKIN",
-    "bildirim_tarihi": "23.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "Subazlı malzeme depoları  havaların soğumasıyla birlikte bulunduğumuz alanın  çok soğuk olması nedeniyle  hastalanma  riskimiz bulunmaktadır",
-    "oneri": "Önleyici kıyafet veya ısıtıcı tarzı aksiyonlar alınabilir",
-    "alinanan_aksiyon": "FT VE RT ekipmanlarına kullanan personellere termal elbise dağıtılmaktadır hareketli çalışnlarımıza kışlık montlar termal içilikler verilmektedir."
-  },
-  {
-    "ad_soyad": "SAMİ AYDIN (DEPO)",
-    "bildirim_tarihi": "23.12.2025",
-    "durum": "Tamamlandı",
-    "tespit": "Lojistik Gebze 1 içeri araç alırken araçlar nereye hangi rampaya yanaşacağını  bilmiyor bu da içerde kaousa ve kazlara sebep oluyor.",
-    "oneri": "İçeri araç çağrılırken hangi rampaya yanaşacağı belirtilmeli kantar üstünün de dijital ekran olmalı yanaşacağı  rampa gösterilmeli bölylece  şöferin nere yanaşcagını bilir Kaus ve kaza yapam riski azalır",
-    "alinanan_aksiyon": "YRD sisteminde yanaşacağı rampa mevcuutur rampa çavuşu yanaştırmaktadır"
   }
 ];
 
