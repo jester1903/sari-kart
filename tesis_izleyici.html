@@ -71,12 +71,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <body>
 
 <div class="top-bar">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <button onclick="window.location.href='index.html'" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:20px;color:rgba(255,255,255,0.6);font-family:inherit;font-size:12px;cursor:pointer;transition:all 0.15s;white-space:nowrap;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.color='rgba(255,255,255,0.6)';this.style.borderColor='rgba(255,255,255,0.15)'">← Ana Sayfa</button>
-    <div>
-      <div class="app-title">🏭 Tesis Olay İzleyici</div>
-
-    </div>
+  <div>
+    <div class="app-title">🏭 Tesis Olay İzleyici</div>
+    <div class="app-sub">Salt okunur · Supabase bulut verisi · Yönetici Panelindeki değişiklikler anında yansır</div>
   </div>
   <div class="top-right">
     <button class="btn-heat" id="heatBtn" onclick="toggleHeat()">🌡 Isı Haritası</button>
@@ -155,8 +152,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 <script>
 // ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
-const SB_URL = 'https://wvzloxifhekwgvyoiudv.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2emxveGlmaGVrd2d2eW9pdWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzODMyNTcsImV4cCI6MjA5NTk1OTI1N30.DvM--DZboUnVkcyDmcTcalk8N-TtXHrddTh2zqF5ECY';
+const SB_URL = 'https://ndolltjbhfyailjhzuhq.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kb2xsdGpiaGZ5YWlsamh6dWhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTE1NzksImV4cCI6MjA5NzY2NzU3OX0.F6283h-aRVLvIIidC5HSXigolJ6lKYLhb8ZFuoK1ma8';
 const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
 async function sbGet(table, params=''){
