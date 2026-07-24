@@ -76,6 +76,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     <div class="app-sub">Salt okunur · Supabase bulut verisi · Yönetici Panelindeki değişiklikler anında yansır</div>
   </div>
   <div class="top-right">
+    <button class="btn-heat" id="lblToggleBtn" onclick="toggleLabels()" style="border-color:#4f8ef7;color:#4f8ef7;background:#4f8ef718">🏷 Bölge Adları</button>
     <button class="btn-heat" id="heatBtn" onclick="toggleHeat()">🌡 Isı Haritası</button>
     <div class="live-badge"><span class="live-dot"></span>Canlı</div>
     <button class="btn-refresh" onclick="refreshData()">🔄 Yenile</button>
@@ -174,7 +175,33 @@ const TYPES={
 // ─── STATE ─────────────────────────────────────────────────────────────────
 let curTesisId=null, curTesisName='';
 let incidents=[], zones=[], imgDataUrl=null, mapImg=null;
-let heatMode=false, activeTF=null;
+let heatMode=false, activeTF=null, showLabels=true;
+
+// ─── OTOMATİK ETİKET BOYUTU ──────────────────────────────────────────────
+// Her bölgenin ekrandaki genişliğine göre etiket boyutunu kendisi hesaplar.
+// Kullanıcı ayarı yok — küçük bölge küçük yazı, geniş bölge büyük yazı alır.
+function zoneBBox(pts){
+  let minX=1,maxX=0,minY=1,maxY=0;
+  pts.forEach(p=>{if(p.x<minX)minX=p.x;if(p.x>maxX)maxX=p.x;if(p.y<minY)minY=p.y;if(p.y>maxY)maxY=p.y;});
+  return{w:maxX-minX,h:maxY-minY};
+}
+// Dönen değer: ekran pikseli cinsinden yazı boyutu
+function autoLabelPx(ctx,name,zone,imgW,scale){
+  const bb=zoneBBox(zone.pts);
+  const boxPx=bb.w*imgW*scale;          // bölgenin ekrandaki genişliği
+  const MIN=7, MAX=15;                  // okunabilirlik alt/üst sınırı
+  // metni kutunun %85'ine sığdıracak boyutu bul (10px referansla ölçekle)
+  ctx.font='bold 10px Inter,sans-serif';
+  const wAt10=ctx.measureText(name).width || 1;
+  let px=(boxPx*0.85)/wAt10*10;
+  // dar ekranda bir tık daha küçült
+  if(window.innerWidth<700) px*=0.85;
+  return Math.max(MIN,Math.min(MAX,px));
+}
+// Yerleştirilen etiket kutularını tutar; çakışan etiket çizilmez
+function rectsOverlap(a,b){
+  return !(a.x2<b.x1||b.x2<a.x1||a.y2<b.y1||b.y2<a.y1);
+}
 let filter={from:'',to:'',zone:'',type:''};
 let tooltip={incId:null};
 
@@ -298,6 +325,13 @@ function updateZoneSel(){
 function applyFilter(){filter={from:document.getElementById('fFrom').value,to:document.getElementById('fTo').value,zone:document.getElementById('fZone').value,type:document.getElementById('fType').value};tooltip.incId=null;drawMap();}
 function resetFilter(){filter={from:'',to:'',zone:'',type:''};activeTF=null;['fFrom','fTo'].forEach(id=>document.getElementById(id).value='');['fZone','fType'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));tooltip.incId=null;drawMap();}
 function toggleTF(t){if(activeTF===t){activeTF=null;document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));}else{activeTF=t;Object.keys(TYPES).forEach(k=>{document.getElementById('card-'+k).classList.toggle('dimmed',k!==t);document.getElementById('card-'+k).classList.toggle('active-filter',k===t);});}tooltip.incId=null;drawMap();}
+function toggleLabels(){
+  showLabels=!showLabels;
+  const btn=document.getElementById('lblToggleBtn');
+  btn.style.background=showLabels?'#4f8ef718':'#4f8ef745';
+  btn.textContent=showLabels?'🏷 Bölge Adları':'🏷 Adlar Gizli';
+  drawMap();
+}
 function toggleHeat(){heatMode=!heatMode;const btn=document.getElementById('heatBtn');btn.classList.toggle('on',heatMode);btn.textContent=heatMode?'🌡 Isı Haritası ✓':'🌡 Isı Haritası';document.getElementById('heatLegend').style.display=heatMode?'flex':'none';tooltip.incId=null;drawMap();}
 
 function getFiltered(){return incidents.filter(i=>{if(filter.from&&i.date&&i.date<filter.from)return false;if(filter.to&&i.date&&i.date>filter.to)return false;if(filter.zone&&i.zone!==filter.zone)return false;if(filter.type&&i.type!==filter.type)return false;if(activeTF&&i.type!==activeTF)return false;return true;});}
@@ -340,22 +374,62 @@ function drawMap(){
     const scores=new Array(zones.length).fill(0);
     filtered.forEach(inc=>{if(inc.x==null||inc.y==null)return;zones.forEach((z,zi)=>{if(ptInPoly(inc.x,inc.y,z.pts))scores[zi]+=(TYPES[inc.type]?.weight||1);});});
     const maxScore=Math.max(1,...scores);
+    // ── ISI MODU: bölgeleri boya, sonra etiketleri otomatik boyutla çiz ──
     zones.forEach((z,zi)=>{
       const raw=scores[zi],t=raw/maxScore,c=scoreColor(t);
       drawZP(z,`rgba(${c.r},${c.g},${c.b},0.9)`,`rgba(${c.r},${c.g},${c.b},${c.a})`);
-      const cen=polyCentroid(z.pts);const cp=ni(cen.x,cen.y);
-      ctx.textAlign='center';ctx.font=`bold ${fs}px Inter,sans-serif`;ctx.fillStyle='#fff';
-      ctx.shadowColor='rgba(0,0,0,.85)';ctx.shadowBlur=6/vp.scale;
-      ctx.fillText(z.name,cp.x,cp.y);ctx.shadowBlur=0;ctx.textAlign='left';
     });
+    if(showLabels){
+      const placed=[];
+      zones.forEach(z=>{
+        const px=autoLabelPx(ctx,z.name,z,iw,vp.scale);
+        const sz=px/vp.scale;
+        const cen=polyCentroid(z.pts),cp=ni(cen.x,cen.y);
+        ctx.font=`bold ${sz}px Inter,sans-serif`;
+        const tw=ctx.measureText(z.name).width;
+        // çakışma kontrolü ekran pikseli cinsinden
+        const r={x1:(cp.x-tw/2)*vp.scale,x2:(cp.x+tw/2)*vp.scale,y1:(cp.y-sz)*vp.scale,y2:(cp.y+sz*0.4)*vp.scale};
+        if(placed.some(p=>rectsOverlap(r,p)))return;
+        placed.push(r);
+        ctx.textAlign='center';ctx.fillStyle='#fff';
+        ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=5/vp.scale;
+        ctx.fillText(z.name,cp.x,cp.y);
+        ctx.shadowBlur=0;ctx.textAlign='left';
+      });
+    }
   } else {
     zones.forEach(z=>{
       const parts=z.fill.split('|');
-      drawZP(z,parts[1],null); // stroke only
-      const cen=polyCentroid(z.pts);const cp=ni(cen.x,cen.y);
-      ctx.font=`bold ${fs}px Inter,sans-serif`;ctx.fillStyle=parts[1];
-      ctx.fillText(z.name,cp.x-ctx.measureText(z.name).width/2,cp.y);
+      drawZP(z,parts[1],null); // sadece sınır çizgisi
     });
+    // ── Etiketler: otomatik boyut + çakışma elemesi ──
+    if(showLabels){
+      const placed=[];
+      zones.forEach(z=>{
+        const parts=z.fill.split('|');
+        const px=autoLabelPx(ctx,z.name,z,iw,vp.scale);
+        const sz=px/vp.scale;
+        const cen=polyCentroid(z.pts),cp=ni(cen.x,cen.y);
+        ctx.font=`bold ${sz}px Inter,sans-serif`;
+        const tw=ctx.measureText(z.name).width;
+        const padX=sz*0.45,padY=sz*0.28;
+        const bx=cp.x-tw/2-padX,by=cp.y-sz-padY,bw2=tw+padX*2,bh2=sz+padY*2+2;
+        // çakışan etiketi çizme
+        const r={x1:bx*vp.scale,x2:(bx+bw2)*vp.scale,y1:by*vp.scale,y2:(by+bh2)*vp.scale};
+        if(placed.some(p=>rectsOverlap(r,p)))return;
+        placed.push(r);
+        // arka plan kutusu
+        const br=sz*0.28;
+        ctx.fillStyle='rgba(10,13,22,0.78)';
+        ctx.beginPath();
+        ctx.moveTo(bx+br,by);ctx.lineTo(bx+bw2-br,by);ctx.quadraticCurveTo(bx+bw2,by,bx+bw2,by+br);ctx.lineTo(bx+bw2,by+bh2-br);ctx.quadraticCurveTo(bx+bw2,by+bh2,bx+bw2-br,by+bh2);ctx.lineTo(bx+br,by+bh2);ctx.quadraticCurveTo(bx,by+bh2,bx,by+bh2-br);ctx.lineTo(bx,by+br);ctx.quadraticCurveTo(bx,by,bx+br,by);ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle=parts[1]+'88';ctx.lineWidth=1/vp.scale;ctx.stroke();
+        // yazı
+        ctx.fillStyle=parts[1];ctx.textAlign='center';
+        ctx.fillText(z.name,cp.x,cp.y);ctx.textAlign='left';
+      });
+    }
     filtered.forEach(inc=>{
       if(inc.x==null||inc.y==null)return;
       const p=ni(inc.x,inc.y),col=TYPES[inc.type]?.color||'#888';
