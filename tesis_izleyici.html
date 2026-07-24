@@ -30,7 +30,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .no-tesis-ico{font-size:52px;opacity:.3}
 .no-tesis-txt{font-size:15px;color:var(--text2)}
 .no-tesis-sub{font-size:12px;color:var(--text3);max-width:340px;line-height:1.7}
-.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;transition:all .15s;user-select:none}
 .stat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
 .stat-card.dimmed{opacity:.28}
@@ -104,6 +104,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 <div id="mainContent" style="display:none">
   <div class="stats-row">
+  <div class="stat-card" id="card-kayipli" onclick="toggleTF('kayipli')"><span class="stat-dot" style="background:#b3123c"></span><div class="stat-num" id="s-kayipli">0</div><div class="stat-lbl">Kayıp Süreli İş Kazası</div></div>
     <div class="stat-card" id="card-is"     onclick="toggleTF('is')">    <span class="stat-dot" style="background:#e8534a"></span><div class="stat-num" id="s-is">0</div>    <div class="stat-lbl">İş Kazası</div></div>
     <div class="stat-card" id="card-cevre"  onclick="toggleTF('cevre')"> <span class="stat-dot" style="background:#22c97a"></span><div class="stat-num" id="s-cevre">0</div>  <div class="stat-lbl">Çevre Kazası</div></div>
     <div class="stat-card" id="card-maddi"  onclick="toggleTF('maddi')"> <span class="stat-dot" style="background:#4f8ef7"></span><div class="stat-num" id="s-maddi">0</div>  <div class="stat-lbl">Maddi Hasarlı</div></div>
@@ -119,7 +120,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     <div class="fg"><span class="flbl">Tür</span>
       <select id="fType">
         <option value="">Tümü</option>
-        <option value="is">İş Kazası</option><option value="cevre">Çevre Kazası</option>
+        <option value="kayipli">Kayıp Süreli İş Kazası</option><option value="is">İş Kazası</option><option value="cevre">Çevre Kazası</option>
         <option value="maddi">Maddi Hasarlı</option><option value="yangin">Yangın</option><option value="ramak">Ramak Kala</option>
       </select>
     </div>
@@ -165,12 +166,15 @@ async function sbGet(table, params=''){
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 const TYPES={
-  is:    {label:'İş Kazası',    color:'#e8534a',key:'s-is',    weight:5},
-  yangin:{label:'Yangın',       color:'#f5a623',key:'s-yangin',weight:4},
-  cevre: {label:'Çevre Kazası', color:'#22c97a',key:'s-cevre', weight:3},
-  maddi: {label:'Maddi Hasarlı',color:'#4f8ef7',key:'s-maddi', weight:2},
-  ramak: {label:'Ramak Kala',   color:'#9b8ff7',key:'s-ramak', weight:1}
+  kayipli:{label:'Kayıp Süreli İş Kazası', color:'#b3123c', key:'s-kayipli', weight:6},
+  is:     {label:'İş Kazası',              color:'#e8534a', key:'s-is',      weight:5},
+  yangin: {label:'Yangın',                 color:'#f5a623', key:'s-yangin',  weight:4},
+  cevre:  {label:'Çevre Kazası',           color:'#22c97a', key:'s-cevre',   weight:3},
+  maddi:  {label:'Maddi Hasarlı',          color:'#4f8ef7', key:'s-maddi',   weight:2},
+  ramak:  {label:'Ramak Kala',             color:'#9b8ff7', key:'s-ramak',   weight:1}
 };
+// sayaç nesnesini TYPES'tan türet — yeni tür eklenince elle güncelleme gerekmez
+function emptyCounts(){const o={};Object.keys(TYPES).forEach(k=>o[k]=0);return o;}
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 let curTesisId=null, curTesisName='';
@@ -310,7 +314,7 @@ function normToImg(nx,ny){
 
 // ─── STATS ────────────────────────────────────────────────────────────────
 function updateStats(){
-  const c={is:0,cevre:0,maddi:0,yangin:0,ramak:0};
+  const c=emptyCounts();
   incidents.forEach(i=>{if(c[i.type]!==undefined)c[i.type]++;});
   Object.keys(c).forEach(k=>document.getElementById(TYPES[k].key).textContent=c[k]);
 }
@@ -341,7 +345,7 @@ function ptInPoly(nx,ny,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.l
 function polyCentroid(pts){let cx=0,cy=0;pts.forEach(p=>{cx+=p.x;cy+=p.y;});return{x:cx/pts.length,y:cy/pts.length};}
 function findIncidentAt(nx,ny){
   if(!mapImg)return null;
-  const HR=14/(mapImg.naturalWidth*vp.scale), HRY=14/(mapImg.naturalHeight*vp.scale);
+  const HR=10/(mapImg.naturalWidth*vp.scale), HRY=10/(mapImg.naturalHeight*vp.scale);
   const f=getFiltered();
   for(let i=f.length-1;i>=0;i--){const inc=f[i];if(inc.x==null||inc.y==null)continue;if(Math.abs(inc.x-nx)<HR&&Math.abs(inc.y-ny)<HRY)return inc;}
   return null;
@@ -360,7 +364,7 @@ function drawMap(){
   const iw=mapImg.naturalWidth,ih=mapImg.naturalHeight;
   ctx.drawImage(mapImg,0,0,iw,ih);
   const filtered=getFiltered();
-  const fs=Math.round(13/vp.scale),dotR=Math.round(9/vp.scale),dotRO=Math.round(14/vp.scale),dotRP=Math.round(18/vp.scale);
+  const fs=Math.round(13/vp.scale),dotR=Math.round(5.5/vp.scale),dotRO=Math.round(8.5/vp.scale),dotRP=Math.round(12/vp.scale);
   function ni(nx,ny){return{x:nx*iw,y:ny*ih};}
   function drawZP(zone,sc,fc){
     if(!zone.pts||zone.pts.length<2)return;
