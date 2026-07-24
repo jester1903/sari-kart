@@ -105,7 +105,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <div id="mainContent" style="display:none">
   <div class="stats-row">
   <div class="stat-card" id="card-kayipli" onclick="toggleTF('kayipli')"><span class="stat-dot" style="background:#b3123c"></span><div class="stat-num" id="s-kayipli">0</div><div class="stat-lbl">Kayıp Süreli İş Kazası</div></div>
-    <div class="stat-card" id="card-is"     onclick="toggleTF('is')">    <span class="stat-dot" style="background:#e8534a"></span><div class="stat-num" id="s-is">0</div>    <div class="stat-lbl">İş Kazası</div></div>
+    <div class="stat-card" id="card-is"     onclick="toggleTF('is')">    <span class="stat-dot" style="background:#e8534a"></span><div class="stat-num" id="s-is">0</div>    <div class="stat-lbl">İş Kazası<span style="display:block;font-size:9px;color:var(--text3);margin-top:1px">kayıp süreli dahil</span></div></div>
     <div class="stat-card" id="card-cevre"  onclick="toggleTF('cevre')"> <span class="stat-dot" style="background:#22c97a"></span><div class="stat-num" id="s-cevre">0</div>  <div class="stat-lbl">Çevre Kazası</div></div>
     <div class="stat-card" id="card-maddi"  onclick="toggleTF('maddi')"> <span class="stat-dot" style="background:#4f8ef7"></span><div class="stat-num" id="s-maddi">0</div>  <div class="stat-lbl">Maddi Hasarlı</div></div>
     <div class="stat-card" id="card-yangin" onclick="toggleTF('yangin')"><span class="stat-dot" style="background:#f5a623"></span><div class="stat-num" id="s-yangin">0</div> <div class="stat-lbl">Yangın</div></div>
@@ -175,6 +175,13 @@ const TYPES={
 };
 // sayaç nesnesini TYPES'tan türet — yeni tür eklenince elle güncelleme gerekmez
 function emptyCounts(){const o={};Object.keys(TYPES).forEach(k=>o[k]=0);return o;}
+
+// ── Tür grubu: "İş Kazası" seçimi kayıp süreli iş kazalarını da kapsar ──
+// (puanlama/ısı haritası etkilenmez; her olay kendi ağırlığıyla bir kez sayılır)
+const TYPE_GROUPS={ is:['is','kayipli'] };
+function typeGroup(t){ return TYPE_GROUPS[t]||[t]; }
+function matchesType(incType,selected){ return !selected || typeGroup(selected).includes(incType); }
+
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 let curTesisId=null, curTesisName='';
@@ -315,9 +322,12 @@ function normToImg(nx,ny){
 
 // ─── STATS ────────────────────────────────────────────────────────────────
 function updateStats(){
-  const c=emptyCounts();
-  incidents.forEach(i=>{if(c[i.type]!==undefined)c[i.type]++;});
-  Object.keys(c).forEach(k=>document.getElementById(TYPES[k].key).textContent=c[k]);
+  // her kart kendi tür grubunu sayar → İş Kazası kartı kayıp sürelileri de içerir
+  Object.keys(TYPES).forEach(k=>{
+    const grp=typeGroup(k);
+    const n=incidents.filter(i=>grp.includes(i.type)).length;
+    document.getElementById(TYPES[k].key).textContent=n;
+  });
 }
 function updateZoneSel(){
   const sel=document.getElementById('fZone');const cur=sel.value;
@@ -329,7 +339,7 @@ function updateZoneSel(){
 // ─── FILTER ───────────────────────────────────────────────────────────────
 function applyFilter(){filter={from:document.getElementById('fFrom').value,to:document.getElementById('fTo').value,zone:document.getElementById('fZone').value,type:document.getElementById('fType').value};tooltip.incId=null;drawMap();}
 function resetFilter(){filter={from:'',to:'',zone:'',type:''};activeTF=null;['fFrom','fTo'].forEach(id=>document.getElementById(id).value='');['fZone','fType'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));tooltip.incId=null;drawMap();}
-function toggleTF(t){if(activeTF===t){activeTF=null;document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));}else{activeTF=t;Object.keys(TYPES).forEach(k=>{document.getElementById('card-'+k).classList.toggle('dimmed',k!==t);document.getElementById('card-'+k).classList.toggle('active-filter',k===t);});}tooltip.incId=null;drawMap();}
+function toggleTF(t){if(activeTF===t){activeTF=null;document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('dimmed','active-filter'));}else{activeTF=t;const grp=typeGroup(t);Object.keys(TYPES).forEach(k=>{const inGrp=grp.includes(k);document.getElementById('card-'+k).classList.toggle('dimmed',!inGrp);document.getElementById('card-'+k).classList.toggle('active-filter',k===t);});}tooltip.incId=null;drawMap();}
 function toggleLabels(){
   showLabels=!showLabels;
   const btn=document.getElementById('lblToggleBtn');
@@ -339,7 +349,7 @@ function toggleLabels(){
 }
 function toggleHeat(){heatMode=!heatMode;const btn=document.getElementById('heatBtn');btn.classList.toggle('on',heatMode);btn.textContent=heatMode?'🌡 Isı Haritası ✓':'🌡 Isı Haritası';document.getElementById('heatLegend').style.display=heatMode?'flex':'none';tooltip.incId=null;drawMap();}
 
-function getFiltered(){return incidents.filter(i=>{if(filter.from&&i.date&&i.date<filter.from)return false;if(filter.to&&i.date&&i.date>filter.to)return false;if(filter.zone&&i.zone!==filter.zone)return false;if(filter.type&&i.type!==filter.type)return false;if(activeTF&&i.type!==activeTF)return false;return true;});}
+function getFiltered(){return incidents.filter(i=>{if(filter.from&&i.date&&i.date<filter.from)return false;if(filter.to&&i.date&&i.date>filter.to)return false;if(filter.zone&&i.zone!==filter.zone)return false;if(!matchesType(i.type,filter.type))return false;if(!matchesType(i.type,activeTF))return false;return true;});}
 
 // ─── GEOMETRY ─────────────────────────────────────────────────────────────
 function ptInPoly(nx,ny,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const xi=pts[i].x,yi=pts[i].y,xj=pts[j].x,yj=pts[j].y;if(((yi>ny)!=(yj>ny))&&(nx<(xj-xi)*(ny-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
@@ -357,6 +367,108 @@ function scoreColor(t){if(t<0.001)return{r:79,g:142,b:247,a:0.15};let r,g,b;if(t
 
 // ─── DRAW ─────────────────────────────────────────────────────────────────
 
+
+// ── Bilgi kutusu: ekran katmanında, ekrana sığacak şekilde ──────────────
+function wrapLines(ctx,text,maxW){
+  const out=[];
+  String(text).split('\n').forEach(par=>{
+    const words=par.split(/\s+/).filter(Boolean);
+    if(!words.length){return;}
+    let cur='';
+    words.forEach(w=>{
+      const t=cur?cur+' '+w:w;
+      if(ctx.measureText(t).width<=maxW){cur=t;}
+      else{
+        if(cur)out.push(cur);
+        // tek kelime bile sığmıyorsa parçala
+        if(ctx.measureText(w).width>maxW){
+          let piece='';
+          for(const ch of w){
+            if(ctx.measureText(piece+ch).width<=maxW){piece+=ch;}
+            else{out.push(piece);piece=ch;}
+          }
+          cur=piece;
+        } else {cur=w;}
+      }
+    });
+    if(cur)out.push(cur);
+  });
+  return out;
+}
+
+function drawTipScreen(ctx,tip,cw,ch){
+  const inc=tip.inc, col=TYPES[inc.type]?.color||'#888';
+  const narrow=cw<520;                       // mobil
+  const fT=narrow?12:13;                     // başlık
+  const fM=narrow?10:11;                     // meta
+  const fD=narrow?10.5:11.5;                 // açıklama
+  const pad=narrow?10:12;
+  const lhT=fT*1.3, lhM=fM*1.35, lhD=fD*1.4;
+  const maxBoxW=Math.min(cw-16, narrow?cw*0.9:360);
+  const innerW=maxBoxW-pad*2;
+
+  const title=inc.title||(TYPES[inc.type]?.label||'Olay');
+  const meta=(TYPES[inc.type]?.label||'')+(inc.zone?' · '+inc.zone:'')+(inc.date?' · '+inc.date:'')+(inc.time?' '+inc.time:'');
+  const desc=inc.desc||'';
+
+  ctx.font=`bold ${fT}px Inter,sans-serif`;
+  const tLines=wrapLines(ctx,title,innerW);
+  ctx.font=`${fM}px Inter,sans-serif`;
+  const mLines=wrapLines(ctx,meta,innerW);
+  ctx.font=`${fD}px Inter,sans-serif`;
+  let dLines=desc?wrapLines(ctx,desc,innerW):[];
+  const MAXD=narrow?5:7;                     // açıklamada en fazla satır
+  let clipped=false;
+  if(dLines.length>MAXD){dLines=dLines.slice(0,MAXD);clipped=true;}
+  if(clipped)dLines[dLines.length-1]=dLines[dLines.length-1].replace(/\s*\S*$/,'')+'…';
+
+  // gerçek genişlik: en uzun satır
+  let contentW=0;
+  ctx.font=`bold ${fT}px Inter,sans-serif`;tLines.forEach(l=>contentW=Math.max(contentW,ctx.measureText(l).width));
+  ctx.font=`${fM}px Inter,sans-serif`;mLines.forEach(l=>contentW=Math.max(contentW,ctx.measureText(l).width));
+  ctx.font=`${fD}px Inter,sans-serif`;dLines.forEach(l=>contentW=Math.max(contentW,ctx.measureText(l).width));
+  const closeTxt='dokun: kapat';
+  ctx.font=`${fM-1}px Inter,sans-serif`;
+  contentW=Math.max(contentW,ctx.measureText(closeTxt).width);
+  const bw=Math.min(maxBoxW,contentW+pad*2);
+
+  const bodyH=tLines.length*lhT+mLines.length*lhM+(dLines.length?dLines.length*lhD+4:0);
+  const bh=pad+bodyH+lhM+pad*0.6;
+
+  // konum: noktanın yanına, ekran dışına taşmadan
+  let tx=tip.sx+14, ty=tip.sy-bh/2;
+  if(tx+bw>cw-8)tx=tip.sx-bw-14;
+  if(tx<8)tx=Math.max(8,(cw-bw)/2);
+  if(ty<8)ty=8;
+  if(ty+bh>ch-8)ty=ch-bh-8;
+
+  const r=8;
+  function rr(x,y,w,h){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+
+  ctx.shadowColor='rgba(0,0,0,.65)';ctx.shadowBlur=18;
+  ctx.fillStyle='rgba(26,29,39,0.97)';rr(tx,ty,bw,bh);ctx.fill();ctx.shadowBlur=0;
+  ctx.strokeStyle=col;ctx.lineWidth=1.5;rr(tx,ty,bw,bh);ctx.stroke();
+  // üst renk şeridi
+  ctx.save();rr(tx,ty,bw,bh);ctx.clip();
+  ctx.fillStyle=col+'66';ctx.fillRect(tx,ty,bw,4);ctx.restore();
+
+  let py=ty+pad+fT;
+  ctx.textAlign='left';
+  ctx.font=`bold ${fT}px Inter,sans-serif`;ctx.fillStyle='#e8eaf2';
+  tLines.forEach(l=>{ctx.fillText(l,tx+pad,py);py+=lhT;});
+  ctx.font=`${fM}px Inter,sans-serif`;ctx.fillStyle='#8b90a8';
+  mLines.forEach(l=>{ctx.fillText(l,tx+pad,py);py+=lhM;});
+  if(dLines.length){
+    py+=4;
+    ctx.font=`${fD}px Inter,sans-serif`;ctx.fillStyle='#a9b0c8';
+    dLines.forEach(l=>{ctx.fillText(l,tx+pad,py);py+=lhD;});
+  }
+  ctx.font=`${fM-1}px Inter,sans-serif`;ctx.fillStyle='#555b75';
+  ctx.fillText(closeTxt,tx+pad,ty+bh-pad*0.55);
+  ctx.textAlign='left';
+  return {x1:tx,y1:ty,x2:tx+bw,y2:ty+bh};
+}
+
 function drawMap(){
   const canvas=document.getElementById('mapCanvas');if(!canvas||!mapImg)return;
   const ctx=canvas.getContext('2d');const cw=canvas.width,ch=canvas.height;
@@ -365,6 +477,7 @@ function drawMap(){
   const iw=mapImg.naturalWidth,ih=mapImg.naturalHeight;
   ctx.drawImage(mapImg,0,0,iw,ih);
   const filtered=getFiltered();
+  let pendingTip=null;
   const fs=Math.round(13/vp.scale),dotR=Math.round(5.5/vp.scale),dotRO=Math.round(8.5/vp.scale),dotRP=Math.round(12/vp.scale);
   function ni(nx,ny){return{x:nx*iw,y:ny*ih};}
   function drawZP(zone,sc,fc){
@@ -452,29 +565,14 @@ function drawMap(){
     if(tooltip.incId){
       const inc=incidents.find(i=>i.id===tooltip.incId);
       if(inc&&inc.x!=null&&inc.y!=null){
-        const p=ni(inc.x,inc.y),col=TYPES[inc.type]?.color||'#888';
-        const title=inc.title||(TYPES[inc.type]?.label||'Olay');
-        const meta=(TYPES[inc.type]?.label||'')+(inc.zone?' · '+inc.zone:'')+(inc.date?' · '+inc.date:'')+(inc.time?' '+inc.time:'');
-        const desc=inc.desc||'';
-        const pad=12/vp.scale,lh=19/vp.scale,fst=12/vp.scale;
-        ctx.font=`bold ${fst}px Inter,sans-serif`;let maxW=ctx.measureText(title).width;
-        ctx.font=`${10/vp.scale}px Inter,sans-serif`;maxW=Math.max(maxW,ctx.measureText(meta).width,desc?ctx.measureText(desc).width:0);
-        const bw=maxW+pad*2,bh=pad+(desc?lh*3:lh*2)+pad*0.6;
-        let tx=p.x+16/vp.scale,ty=p.y-bh/2;if(tx+bw>iw)tx=p.x-bw-16/vp.scale;if(ty<4)ty=4;if(ty+bh>ih)ty=ih-bh-4;
-        const r=7/vp.scale;function rr(x,y,w,h){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
-        ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=14/vp.scale;ctx.fillStyle='#1a1d27f5';rr(tx,ty,bw,bh);ctx.fill();ctx.shadowBlur=0;
-        ctx.strokeStyle=col;ctx.lineWidth=1.5/vp.scale;rr(tx,ty,bw,bh);ctx.stroke();
-        ctx.fillStyle=col+'55';ctx.beginPath();ctx.moveTo(tx+r,ty);ctx.lineTo(tx+bw-r,ty);ctx.quadraticCurveTo(tx+bw,ty,tx+bw,ty+r);ctx.lineTo(tx+bw,ty+5/vp.scale);ctx.lineTo(tx,ty+5/vp.scale);ctx.lineTo(tx,ty+r);ctx.quadraticCurveTo(tx,ty,tx+r,ty);ctx.closePath();ctx.fill();
-        ctx.font=`${10/vp.scale}px Inter,sans-serif`;ctx.fillStyle='#555b75';ctx.textAlign='right';ctx.fillText('× kapat',tx+bw-8/vp.scale,ty+bh-7/vp.scale);
-        let py=ty+pad+lh-3/vp.scale;ctx.textAlign='left';
-        ctx.font=`bold ${fst}px Inter,sans-serif`;ctx.fillStyle='#e8eaf2';ctx.fillText(title,tx+pad,py);py+=lh;
-        ctx.font=`${10/vp.scale}px Inter,sans-serif`;ctx.fillStyle='#8b90a8';ctx.fillText(meta,tx+pad,py);py+=lh;
-        if(desc){ctx.fillStyle='#6b7090';let d=desc;while(d.length>0&&ctx.measureText(d).width>bw-pad*2)d=d.slice(0,-1);if(d!==desc)d=d.slice(0,-1)+'…';ctx.fillText(d,tx+pad,py);}
-        ctx.textAlign='left';
+        const p=ni(inc.x,inc.y);
+        // ekran koordinatına çevir; kutu restore sonrası ekran katmanında çizilir
+        pendingTip={inc,sx:p.x*vp.scale+vp.ox,sy:p.y*vp.scale+vp.oy};
       }
     }
   }
   ctx.restore();
+  if(pendingTip)drawTipScreen(ctx,pendingTip,cw,ch);
   ctx.font='11px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,0.3)';ctx.textAlign='right';
   ctx.fillText(`${Math.round(vp.scale*100)}%  |  Tekerlek: zoom  Sürükle: kaydır  Çift tık: sıfırla`,cw-10,ch-8);
   ctx.textAlign='left';
