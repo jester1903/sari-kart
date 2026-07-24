@@ -196,7 +196,8 @@ function autoLabelPx(ctx,name,zone,imgW,scale){
   const MIN=7, MAX=15;                  // okunabilirlik alt/üst sınırı
   // metni kutunun %85'ine sığdıracak boyutu bul (10px referansla ölçekle)
   ctx.font='bold 10px Inter,sans-serif';
-  const wAt10=ctx.measureText(name).width || 1;
+  let wAt10=1;
+  String(name).split('\n').forEach(l=>{const w=ctx.measureText(l).width;if(w>wAt10)wAt10=w;});
   let px=(boxPx*0.85)/wAt10*10;
   // dar ekranda bir tık daha küçült
   if(window.innerWidth<700) px*=0.85;
@@ -390,14 +391,16 @@ function drawMap(){
         const sz=px/vp.scale;
         const cen=polyCentroid(z.pts),cp=ni(cen.x,cen.y);
         ctx.font=`bold ${sz}px Inter,sans-serif`;
-        const tw=ctx.measureText(z.name).width;
+        let tw=0;String(z.name).split('\n').forEach(l=>{const w=ctx.measureText(l).width;if(w>tw)tw=w;});
         // çakışma kontrolü ekran pikseli cinsinden
-        const r={x1:(cp.x-tw/2)*vp.scale,x2:(cp.x+tw/2)*vp.scale,y1:(cp.y-sz)*vp.scale,y2:(cp.y+sz*0.4)*vp.scale};
+        const nL=String(z.name).split('\n').length;
+        const r={x1:(cp.x-tw/2)*vp.scale,x2:(cp.x+tw/2)*vp.scale,y1:(cp.y-sz*1.22*nL/2-sz*0.3)*vp.scale,y2:(cp.y+sz*1.22*nL/2+sz*0.3)*vp.scale};
         if(placed.some(p=>rectsOverlap(r,p)))return;
         placed.push(r);
         ctx.textAlign='center';ctx.fillStyle='#fff';
         ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=5/vp.scale;
-        ctx.fillText(z.name,cp.x,cp.y);
+        const hl=String(z.name).split('\n');const hlh=sz*1.22;
+        hl.forEach((l,li)=>{ctx.fillText(l,cp.x,cp.y-hlh*(hl.length-1)/2+hlh*li);});
         ctx.shadowBlur=0;ctx.textAlign='left';
       });
     }
@@ -415,9 +418,12 @@ function drawMap(){
         const sz=px/vp.scale;
         const cen=polyCentroid(z.pts),cp=ni(cen.x,cen.y);
         ctx.font=`bold ${sz}px Inter,sans-serif`;
-        const tw=ctx.measureText(z.name).width;
+        const lines=String(z.name).split('\n');
+        const lineH=sz*1.22;
+        let tw=0;lines.forEach(l=>{const w=ctx.measureText(l).width;if(w>tw)tw=w;});
+        const blockH=lineH*lines.length;
         const padX=sz*0.45,padY=sz*0.28;
-        const bx=cp.x-tw/2-padX,by=cp.y-sz-padY,bw2=tw+padX*2,bh2=sz+padY*2+2;
+        const bx=cp.x-tw/2-padX,by=cp.y-blockH-padY+lineH*0.25,bw2=tw+padX*2,bh2=blockH+padY*2;
         // çakışan etiketi çizme
         const r={x1:bx*vp.scale,x2:(bx+bw2)*vp.scale,y1:by*vp.scale,y2:(by+bh2)*vp.scale};
         if(placed.some(p=>rectsOverlap(r,p)))return;
@@ -429,9 +435,10 @@ function drawMap(){
         ctx.moveTo(bx+br,by);ctx.lineTo(bx+bw2-br,by);ctx.quadraticCurveTo(bx+bw2,by,bx+bw2,by+br);ctx.lineTo(bx+bw2,by+bh2-br);ctx.quadraticCurveTo(bx+bw2,by+bh2,bx+bw2-br,by+bh2);ctx.lineTo(bx+br,by+bh2);ctx.quadraticCurveTo(bx,by+bh2,bx,by+bh2-br);ctx.lineTo(bx,by+br);ctx.quadraticCurveTo(bx,by,bx+br,by);ctx.closePath();
         ctx.fill();
         ctx.strokeStyle=parts[1]+'88';ctx.lineWidth=1/vp.scale;ctx.stroke();
-        // yazı
+        // yazı — satır satır
         ctx.fillStyle=parts[1];ctx.textAlign='center';
-        ctx.fillText(z.name,cp.x,cp.y);ctx.textAlign='left';
+        lines.forEach((l,li)=>{ctx.fillText(l,cp.x,by+padY+lineH*(li+1)-lineH*0.28);});
+        ctx.textAlign='left';
       });
     }
     filtered.forEach(inc=>{
