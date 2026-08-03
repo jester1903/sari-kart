@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolbox Eğitimleri</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a23;
+    --surface2: #1e2433;
+    --border: rgba(255,255,255,0.07);
+    --accent: #f5a623;
+    --accent2: #f7c948;
+    --green: #2dd98f;
+    --text: #eef0f6;
+    --text-muted: #6b7591;
+    --text-dim: #b8bfd4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 20% 5%, rgba(245,166,35,0.08) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+  .app { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: fade 0.35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .header {
+    padding: 44px 28px 28px;
+    background: linear-gradient(180deg, rgba(245,166,35,0.09) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; color: var(--accent);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer;
+    margin-bottom: 22px; padding: 0;
+  }
+  .title {
+    font-family: 'Syne', sans-serif; font-size: 27px; font-weight: 800;
+    line-height: 1.15; margin-bottom: 8px;
+  }
+  .title .accent {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .sub { color: var(--text-muted); font-size: 14px; }
+
+  .month-list { padding: 20px 24px 40px; display: flex; flex-direction: column; gap: 12px; }
+
+  .year-label {
+    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted);
+    margin: 8px 0 4px 4px;
+  }
+
+  .month-card {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 18px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 16px;
+    cursor: pointer; transition: all 0.15s; text-decoration: none; color: inherit;
+  }
+  .month-card:active { transform: scale(0.98); }
+  .month-card:hover { background: var(--surface2); border-color: rgba(245,166,35,0.3); }
+  .month-card.empty { opacity: 0.4; cursor: default; }
+  .month-card.empty:hover { background: var(--surface); border-color: var(--border); }
+
+  .month-badge {
+    width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #1a0f00;
+  }
+  .month-badge.empty-badge { background: var(--surface2); color: var(--text-muted); }
+  .month-badge .m-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+
+  .month-info { flex: 1; min-width: 0; }
+  .month-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .month-topic { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .month-code {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    background: rgba(245,166,35,0.12); padding: 2px 8px; border-radius: 12px; flex-shrink: 0;
+  }
+  .chevron { color: var(--text-muted); font-size: 18px; }
+
+  /* PDF viewer screen */
+  .pdf-header {
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--border); background: var(--surface);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .pdf-title-wrap { flex: 1; min-width: 0; }
+  .pdf-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pdf-sub { font-size: 12px; color: var(--text-muted); }
+  .pdf-download {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border-radius: 20px; color: #1a0f00; font-size: 12px; font-weight: 700;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .pdf-frame-wrap { height: calc(100vh - 65px); background: #333; }
+  .pdf-frame-wrap iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LİSTE EKRANI -->
+  <div class="screen active" id="screen-list">
+    <div class="header">
+      <button class="back-btn" onclick="window.open('index.html','_self')">← Ana Sayfa</button>
+      <h1 class="title">📚 <span class="accent">Toolbox</span> Eğitimleri</h1>
+      <p class="sub">Aylık İSG işbaşı konuşmaları · konuya dokunarak eğitimi açın</p>
+    </div>
+
+    <div class="month-list">
+      <div class="year-label">2025</div>
+
+      <div class="month-card empty">
+        <div class="month-badge empty-badge"><div class="m-name">AĞU</div></div>
+        <div class="month-info">
+          <div class="month-name">Yakında</div>
+          <div class="month-topic">Bu ayın eğitimi henüz yayınlanmadı</div>
+        </div>
+      </div>
+
+      <div class="month-card">
+        <div class="month-badge"><div class="m-name">MAY</div></div>
+        <div class="month-info">
+          <div class="month-name">Yaşayan Riskler ve Anlık Tehlike Bildirimi</div>
+          <div class="month-topic">Proaktif tehlike tespiti</div>
+        </div>
+        <span class="month-code">TB-05</span>
+      </div>
+
+      <a class="month-card" onclick="openPdf('TB-02.pdf', 'Elektriksel Ekipmanlardaki Uygunsuzluklar', 'Şubat 2025 · TB-02')">
+        <div class="month-badge"><div class="m-name">ŞUB</div></div>
+        <div class="month-info">
+          <div class="month-name">Elektriksel Ekipmanlarda Uygunsuzluklar</div>
+          <div class="month-topic">Kablo, rakor, topraklama ve priz kontrolleri</div>
+        </div>
+        <span class="month-code">TB-02</span>
+      </a>
+
+      <div class="month-card">
+        <div class="month-badge"><div class="m-name">OCA</div></div>
+        <div class="month-info">
+          <div class="month-name">Ramazan Ayında Güvenli Çalışma</div>
+          <div class="month-topic">Yorgunluk yönetimi ve dikkat</div>
+        </div>
+        <span class="month-code">TB-01</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF GÖRÜNTÜLEME EKRANI -->
+  <div class="screen" id="screen-pdf">
+    <div class="pdf-header">
+      <button class="back-btn" style="margin:0;" onclick="closePdf()">←</button>
+      <div class="pdf-title-wrap">
+        <div class="pdf-title" id="pdf-title">Eğitim</div>
+        <div class="pdf-sub" id="pdf-sub"></div>
+      </div>
+      <a class="pdf-download" id="pdf-download" href="#" download>⬇ İndir</a>
+    </div>
+    <div class="pdf-frame-wrap">
+      <iframe id="pdf-frame" src=""></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function openPdf(file, title, sub) {
+  document.getElementById('pdf-title').textContent = title;
+  document.getElementById('pdf-sub').textContent = sub;
+  document.getElementById('pdf-frame').src = file;
+  document.getElementById('pdf-download').href = file;
+  document.getElementById('screen-list').classList.remove('active');
+  document.getElementById('screen-pdf').classList.add('active');
+  window.scrollTo(0,0);
+}
+function closePdf() {
+  document.getElementById('pdf-frame').src = '';
+  document.getElementById('screen-pdf').classList.remove('active');
+  document.getElementById('screen-list').classList.add('active');
+}
+</script>
+</body>
+</html>
