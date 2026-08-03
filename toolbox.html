@@ -104,9 +104,14 @@
     border-radius: 20px; color: #1a0f00; font-size: 12px; font-weight: 700;
     text-decoration: none; flex-shrink: 0;
   }
-  .pdf-frame-wrap { height: calc(100vh - 65px); background: #333; }
-  .pdf-frame-wrap iframe { width: 100%; height: 100%; border: none; }
+  .pdf-frame-wrap { height: calc(100vh - 65px); background: #1a1d27; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  .pdf-pages { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px; }
+  .pdf-pages canvas { width: 100%; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); background: #fff; }
+  .pdf-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted); gap: 14px; }
+  .pdf-spinner { width: 32px; height: 32px; border: 3px solid rgba(245,166,35,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -188,25 +193,62 @@
       </div>
       <a class="pdf-download" id="pdf-download" href="#" download>⬇ İndir</a>
     </div>
-    <div class="pdf-frame-wrap">
-      <iframe id="pdf-frame" src=""></iframe>
+    <div class="pdf-frame-wrap" id="pdf-frame-wrap">
+      <div class="pdf-pages" id="pdf-pages"></div>
     </div>
   </div>
 
 </div>
 
 <script>
-function openPdf(file, title, sub) {
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+let currentRenderTask = null;
+
+async function openPdf(file, title, sub) {
   document.getElementById('pdf-title').textContent = title;
   document.getElementById('pdf-sub').textContent = sub;
-  document.getElementById('pdf-frame').src = file;
   document.getElementById('pdf-download').href = file;
   document.getElementById('screen-list').classList.remove('active');
   document.getElementById('screen-pdf').classList.add('active');
   window.scrollTo(0,0);
+
+  const pagesContainer = document.getElementById('pdf-pages');
+  const wrap = document.getElementById('pdf-frame-wrap');
+  pagesContainer.innerHTML = '<div class="pdf-loading"><div class="pdf-spinner"></div><div>Eğitim yükleniyor…</div></div>';
+  wrap.scrollTop = 0;
+
+  try {
+    const pdf = await pdfjsLib.getDocument(file).promise;
+    pagesContainer.innerHTML = '';
+
+    // Ekran genişliğine göre render ölçeği (retina için 2x)
+    const containerWidth = pagesContainer.clientWidth - 24;
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const viewport = page.getViewport({ scale: 1 });
+      const scale = (containerWidth / viewport.width) * (window.devicePixelRatio || 1.5);
+      const scaledViewport = page.getViewport({ scale });
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
+
+      pagesContainer.appendChild(canvas);
+      await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+    }
+  } catch (e) {
+    console.error('PDF yüklenemedi:', e);
+    pagesContainer.innerHTML = '<div class="pdf-loading"><div>⚠️ Eğitim yüklenemedi.<br>İndir butonuyla açmayı deneyin.</div></div>';
+  }
 }
+
 function closePdf() {
-  document.getElementById('pdf-frame').src = '';
+  document.getElementById('pdf-pages').innerHTML = '';
   document.getElementById('screen-pdf').classList.remove('active');
   document.getElementById('screen-list').classList.add('active');
 }
